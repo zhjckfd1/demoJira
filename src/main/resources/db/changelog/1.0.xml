@@ -14,8 +14,8 @@
             create table employees
             (
             id_employee Number(6) primary KEY,
-            login varchar2(20) not null unique,
-            password varchar2(20) not null,
+            login varchar2(20 char) not null unique,
+            password varchar2(20 char) not null,
             registered_date DATE not null,
             status Number(1) not null
             );
@@ -32,7 +32,7 @@
             create table tasks_statuses
             (
             id_status NUMBER(3) primary KEY,
-            status varchar2(30) not null unique
+            status varchar2(30 char) not null unique
             );
         </sql>
     </changeSet>
@@ -49,7 +49,7 @@
             id_task Number(30) primary KEY,
             id_status Number(3) not null,
             id_employee Number(6),
-            description varchar2(500) not null,
+            description varchar2(500 char) not null,
             date_of_creation DATE not null
             );
         </sql>
@@ -127,7 +127,7 @@
             create table tasks_relations_types
             (
             id_relation NUMBER(3) primary KEY,
-            relation_type varchar2(50) not null unique
+            relation_type varchar2(50 char) not null unique
             );
         </sql>
     </changeSet>
@@ -144,7 +144,7 @@
             id_comment NUMBER(30) primary KEY,
             id_task Number(30) not null,
             id_employee Number(6) not null,
-            text varchar2(500) not null,
+            text varchar2(500 char) not null,
             date_of_creation DATE not null
             );
         </sql>
