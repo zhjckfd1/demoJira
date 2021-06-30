@@ -49,11 +49,18 @@ public class EmployeeController {
 
     //как правильно?
     @RequestMapping(value = "/employees/{id}",  method = RequestMethod.PUT)
-    public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Employee employee) {
+    public ResponseEntity<?> update(@PathVariable(name = "id") Integer id, @RequestBody Employee employee) {
         Boolean updated = employeeService.editEmployee(employee);
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 
     }
+
+    /*
+    @RequestMapping(value = "/employees/{id}/changeStatus",  method = RequestMethod.PUT)
+    public ResponseEntity<?> changeStatus(@PathVariable(name = "id") Integer id) {
+        employeeService.changeStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }*/
 }

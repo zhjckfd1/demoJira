@@ -11,17 +11,16 @@ public interface TaskService {
     void addTask(Task task);
 
     //получить все задачи сотрудника
-    // /employees/id_employee/tasks
+    // /tasks/id_employee
     List<Task> getAllOnEmployee();
 
 
-    //как в мапинге делим?  (/employees/id_employee/tasks/unfulfilled)
-
+    //  /tasks/id_employee/unfulfilled
     //получить все невыполненные задачи сотрудника
     List<Task> getAllUnfulfilledTasksOnEmployee();
 
     //получить все выполненные задачи сотрудника
-    // /employees/id_employee/tasks/completed)
+    // /tasks/id_employee/completed)
     List<Task> getAllCompletedTasksOnEmployee();
 
     // меняем статус задачи     (описание? сотрудника?)  (updateTask на всю задачу?)

@@ -4,23 +4,13 @@ create table tasks_statuses
     status    varchar2(30) not null unique
 );
 
-create table employees_statuses
-(
-    id_status NUMBER(3) primary KEY,
-    status    varchar2(30) not null unique
-);
-
 create table employees
 (
     id_employee     Number(6) primary KEY,
     login           varchar2(20) not null unique,
     password        varchar2(20) not null,
     registered_date DATE         not null,
-    id_status       NUMBER(3)    not null,
-
-    CONSTRAINT fk_employees_employees_statuses
-        FOREIGN KEY (id_status)
-            REFERENCES employees_statuses (id_status)
+    status          CHAR(1)      not null
 );
 
 create table tasks
@@ -97,4 +87,3 @@ create sequence sequence_tasks_relationship_id start with 1;
 create sequence sequence_task_relation_id start with 1;
 create sequence sequence_comment_id start with 1;
 create sequence sequence_task_status_id start with 1;
-create sequence sequence_employee_status_id start with 1;

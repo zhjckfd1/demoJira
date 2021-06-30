@@ -17,7 +17,10 @@ public interface EmployeeService {
     //смена пароля?
     Boolean editEmployee(Employee employee);
 
-    //delete?
+    //use Number(1)    +
+    //CHAR(1)  и 'Y' / 'N'     (реализовать 2 действия (заблокировать и восстановить), используем true/false  ?)
+    void changeStatus(Integer id_employee);
+
 
     //добавить статус сотрудника(работает, заблокирован)
 }

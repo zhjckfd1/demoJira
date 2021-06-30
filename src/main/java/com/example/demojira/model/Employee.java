@@ -1,5 +1,8 @@
 package com.example.demojira.model;
 
+import org.hibernate.annotations.ValueGenerationType;
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,6 +19,8 @@ public class Employee {
     private Integer id;
 
     //@NotBlank      //не должен быть пустым
+    //@NonNull
+    //@Column(name = "login", nullable = false, unique = true)   //уникальный, не пустой
     @Column(name = "login")
     private String login;
 
@@ -24,6 +29,12 @@ public class Employee {
 
     @Column(name = "registered_date")
     private Date registeredDate;
+
+    //через enum?
+    //@Enumerated(EnumType.STRING)
+    //Number(1)      (0 and 1) (автоупаковки в Boolean нет => только числа   (Byte?))
+    @Column(name = "status")
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -55,5 +66,13 @@ public class Employee {
 
     public void setRegisteredDate(Date registeredDate) {
         this.registeredDate = registeredDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
