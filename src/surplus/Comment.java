@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name = "comments")
 public class Comment {
     @Id
-    @Column(name = "Id_employee")
+    @Column(name = "Id_comment")
     @SequenceGenerator(name = "sci", sequenceName="sequence_comments_id", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sci")
     private Integer id;

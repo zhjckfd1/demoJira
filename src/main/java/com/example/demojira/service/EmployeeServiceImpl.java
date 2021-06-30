@@ -17,9 +17,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     //@Transactional
     @Override
-    public void addEmployee(Employee employee) {
+    public void registrateEmployee(Employee employee) {
         employee.setRegisteredDate(new Date());
-        employee.setStatus(1);
+        employee.setStatus(true);
         employeeRepository.save(employee);
     }
 
@@ -47,14 +47,11 @@ public class EmployeeServiceImpl implements EmployeeService{
         else return false;
     }
 
-    //use Number(1)  +
-    //CHAR(1)  и 'Y' / 'N'     (реализовать 2 действия (заблокировать и восстановить), используем true/false  ?)
     //@Transactional
     @Override
     public void changeStatus(Integer id_employee) {
         Employee e = getById(id_employee);
-        if(e.getStatus() == 1) e.setStatus(0);
-        else e.setStatus(1);
+        e.setStatus(!e.getStatus());
         employeeRepository.save(e);
 
     }

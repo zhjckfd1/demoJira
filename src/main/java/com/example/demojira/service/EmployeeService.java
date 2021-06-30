@@ -7,7 +7,7 @@ import java.util.List;
 public interface EmployeeService {
 
     //назвать register?
-    void addEmployee(Employee employee);
+    void registrateEmployee(Employee employee);
 
     List<Employee> getAll();
 

@@ -1,5 +1,6 @@
 package com.example.demojira.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.ValueGenerationType;
 import org.springframework.lang.NonNull;
 
@@ -7,11 +8,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Schema(description = "Сущность сотрудника")
 @Table(name = "EMPLOYEES")
 public class Employee {
     //добавить имя и фамилию?
 
+
     @Id
+    @Schema(description = "id сотрудника", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "Id_employee")
     //field
     @SequenceGenerator(name = "sei", sequenceName="sequence_employee_id", allocationSize=1)
@@ -21,20 +25,23 @@ public class Employee {
     //@NotBlank      //не должен быть пустым
     //@NonNull
     //@Column(name = "login", nullable = false, unique = true)   //уникальный, не пустой
+    @Schema(description = "логин", example = "login")
     @Column(name = "login")
     private String login;
 
+    @Schema(description = "пароль", example = "password")
     @Column(name = "password")
     private String password;
 
+    @Schema(description = "дата регистрации", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "registered_date")
     private Date registeredDate;
 
-    //через enum?
+
     //@Enumerated(EnumType.STRING)
-    //Number(1)      (0 and 1) (автоупаковки в Boolean нет => только числа   (Byte?))
+    @Schema(description = "состояние записи (false == заблокирована)", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "status")
-    private Integer status;
+    private Boolean status;
 
     public Integer getId() {
         return id;
@@ -68,11 +75,11 @@ public class Employee {
         this.registeredDate = registeredDate;
     }
 
-    public Integer getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 }
