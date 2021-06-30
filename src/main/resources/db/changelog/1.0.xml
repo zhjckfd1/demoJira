@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+
+    <changeSet id="1" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="employees"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table employees
+            (
+            id_employee Number(6) primary KEY,
+            login varchar2(20) not null unique,
+            password varchar2(20) not null,
+            registered_date DATE not null,
+            status Number(1) not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tasks_statuses"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table tasks_statuses
+            (
+            id_status NUMBER(3) primary KEY,
+            status varchar2(30) not null unique
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tasks"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table tasks
+            (
+            id_task Number(30) primary KEY,
+            id_status Number(3) not null,
+            id_employee Number(6),
+            description varchar2(500) not null,
+            date_of_creation DATE not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_employees"/>
+            </not>
+            <columnExists tableName="tasks" columnName="id_employee"/>
+            <columnExists tableName="employees" columnName="id_employee"/>
+        </preConditions>
+        <sql>
+            alter table tasks
+            (
+            ADD CONSTRAINT fk_tasks_employees
+            FOREIGN KEY (id_employee)
+            REFERENCES employees (id_employee);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="5" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_tasks_statuses"/>
+            </not>
+            <columnExists tableName="tasks" columnName="id_status"/>
+            <columnExists tableName="tasks_statuses" columnName="id_status"/>
+        </preConditions>
+        <sql>
+            alter table tasks
+            (
+            ADD CONSTRAINT fk_tasks_tasks_statuses
+            FOREIGN KEY (id_status)
+            REFERENCES tasks_statuses (id_status);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="6" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <!--<indexExists indexName="i_tasks_employees"/> -->
+                <!-- <indexExists tableName="tasks" columnName="id_employee"/>  -->
+                <indexExists tableName="tasks" columnNames="id_employee" />
+            </not>
+            <columnExists tableName="tasks" columnName="id_employee"/>
+        </preConditions>
+        <sql>
+            create index i_tasks_employees on tasks (id_employee);
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks" columnNames="id_status"/>
+            </not>
+            <columnExists tableName="tasks" columnName="id_status"/>
+        </preConditions>
+        <sql>
+            create index i_tasks_statuses on tasks (id_status);
+        </sql>
+    </changeSet>
+
+    <changeSet id="8" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tasks_relations_types"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table tasks_relations_types
+            (
+            id_relation NUMBER(3) primary KEY,
+            relation_type varchar2(50) not null unique
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comments"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table comments
+            (
+            id_comment NUMBER(30) primary KEY,
+            id_task Number(30) not null,
+            id_employee Number(6) not null,
+            text varchar2(500) not null,
+            date_of_creation DATE not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="10" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_comments_employees"/>
+            </not>
+            <columnExists tableName="comments" columnName="id_employee"/>
+            <columnExists tableName="employees" columnName="id_employee"/>
+        </preConditions>
+        <sql>
+            alter table comments
+            (
+            ADD CONSTRAINT fk_comments_employees
+            FOREIGN KEY (id_employee)
+            REFERENCES employees (id_employee);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="11" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_comments_tasks"/>
+            </not>
+            <columnExists tableName="comments" columnName="id_task"/>
+            <columnExists tableName="tasks" columnName="id_task"/>
+        </preConditions>
+        <sql>
+            alter table comments
+            (
+            ADD CONSTRAINT fk_comments_tasks
+            FOREIGN KEY (id_task)
+            REFERENCES tasks (id_task);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="12" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="comments" columnNames="id_employee"/>
+            </not>
+            <columnExists tableName="comments" columnName="id_employee"/>
+        </preConditions>
+        <sql>
+            create index i_comments_employees on comments (id_employee);
+        </sql>
+    </changeSet>
+
+    <changeSet id="13" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="comments" columnNames="id_task"/>
+            </not>
+            <columnExists tableName="comments" columnName="id_task"/>
+        </preConditions>
+        <sql>
+            create index i_comments_tasks on comments (id_task);
+        </sql>
+    </changeSet>
+
+    <changeSet id="14" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tasks_relationships"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table tasks_relationships
+            (
+            id_relationship Number(30) primary KEY,
+            id_task1 Number(30) not null,
+            id_task2 Number(30) not null,
+            id_relation NUMBER(3) not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="15" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks1"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_task1"/>
+            <columnExists tableName="tasks" columnName="id_task"/>
+        </preConditions>
+        <sql>
+            alter table comments
+            (
+            ADD CONSTRAINT fk_tasks_relationships_tasks1
+            FOREIGN KEY (id_task1)
+            REFERENCES tasks (id_task);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="16" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks2"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_task2"/>
+            <columnExists tableName="tasks" columnName="id_task"/>
+        </preConditions>
+        <sql>
+            alter table comments
+            (
+            ADD CONSTRAINT fk_tasks_relationships_tasks2
+            FOREIGN KEY (id_task2)
+            REFERENCES tasks (id_task);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="17" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_relations"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_relation"/>
+            <columnExists tableName="tasks_relations_types" columnName="id_relation"/>
+        </preConditions>
+        <sql>
+            alter table comments
+            (
+            ADD CONSTRAINT fk_tasks_relationships_relations
+            FOREIGN KEY (id_relation)
+            REFERENCES tasks_relations_types (id_relation);
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="18" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_relationships" columnNames="id_task1"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_task1"/>
+        </preConditions>
+        <sql>
+            create index i_tasks_relationships_tasks1 on tasks_relationships (id_task1);
+        </sql>
+    </changeSet>
+
+    <changeSet id="19" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_relationships" columnNames="id_task2"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_task2"/>
+        </preConditions>
+        <sql>
+            create index i_tasks_relationships_tasks2 on tasks_relationships (id_task2);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_relationships" columnNames="id_relation"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="id_relation"/>
+        </preConditions>
+        <sql>
+            create index i_tasks_relationships_relations on tasks_relationships (id_relation);
+        </sql>
+    </changeSet>
+
+    <changeSet id="21" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="sequence_employee_id"/>
+            </not>
+        </preConditions>
+        <sql>
+            create sequence sequence_employee_id start with 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="22" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="sequence_task_id"/>
+            </not>
+        </preConditions>
+        <sql>
+            create sequence sequence_task_id start with 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="23" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="sequence_tasks_relationship_id"/>
+            </not>
+        </preConditions>
+        <sql>
+            create sequence sequence_tasks_relationship_id start with 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="24" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="sequence_comment_id"/>
+            </not>
+        </preConditions>
+        <sql>
+            create sequence sequence_comment_id start with 1;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
+
+
+
+
+
+
+
+
+
+
