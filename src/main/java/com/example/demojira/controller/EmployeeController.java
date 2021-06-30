@@ -57,10 +57,9 @@ public class EmployeeController {
 
     }
 
-    /*
     @RequestMapping(value = "/employees/{id}/changeStatus",  method = RequestMethod.PUT)
     public ResponseEntity<?> changeStatus(@PathVariable(name = "id") Integer id) {
         employeeService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }*/
+    }
 }
