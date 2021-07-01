@@ -13,16 +13,41 @@
         <sql>
             create table employees
             (
-            id_employee Number(6) primary KEY,
-            login varchar2(20 char) not null unique,
+            employee_id Number(6),
+            login varchar2(20 char) not null,
             password varchar2(20 char) not null,
             registered_date DATE not null,
-            status Number(1) not null
+            active Number(1) not null
             );
         </sql>
     </changeSet>
 
     <changeSet id="2" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_employees" tableName="employees" />
+            </not>
+            <columnExists tableName="employees" columnName="employee_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE employees
+            ADD CONSTRAINT pk_employees PRIMARY KEY (employee_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="3" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="employees" columnNames="login"/>
+            </not>
+            <columnExists tableName="employees" columnName="login"/>
+        </preConditions>
+        <sql>
+            create UNIQUE index i_employees_login on employees (login);
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="tasks_statuses"/>
@@ -31,13 +56,38 @@
         <sql>
             create table tasks_statuses
             (
-            id_status NUMBER(3) primary KEY,
-            status varchar2(30 char) not null unique
+            status_id NUMBER(3),
+            status varchar2(30 char) not null
             );
         </sql>
     </changeSet>
 
-    <changeSet id="3" author="Sonin">
+    <changeSet id="5" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_tasks_statuses" tableName="tasks_statuses" />
+            </not>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_statuses
+            ADD CONSTRAINT pk_tasks_statuses PRIMARY KEY (status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="6" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_statuses" columnNames="status"/>
+            </not>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+        </preConditions>
+        <sql>
+            create UNIQUE index i_tasks_statuses_status on tasks_statuses (status);
+        </sql>
+    </changeSet>
+
+    <changeSet id="7" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="tasks"/>
@@ -46,78 +96,86 @@
         <sql>
             create table tasks
             (
-            id_task Number(30) primary KEY,
-            id_status Number(3) not null,
-            id_employee Number(6),
+            task_id Number(30),
+            status_id Number(3) not null,
+            employee_id Number(6) not null,
+            title varchar2(50 char) not null,
             description varchar2(500 char) not null,
-            date_of_creation DATE not null
+            registered_date DATE not null
             );
         </sql>
     </changeSet>
 
-    <changeSet id="4" author="Sonin">
+    <changeSet id="8" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_tasks" tableName="tasks" />
+            </not>
+            <columnExists tableName="tasks" columnName="task_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks
+            ADD CONSTRAINT pk_tasks PRIMARY KEY (task_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="9" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_employees"/>
             </not>
-            <columnExists tableName="tasks" columnName="id_employee"/>
-            <columnExists tableName="employees" columnName="id_employee"/>
+            <columnExists tableName="tasks" columnName="employee_id"/>
+            <columnExists tableName="employees" columnName="employee_id"/>
         </preConditions>
         <sql>
             alter table tasks
-            (
             ADD CONSTRAINT fk_tasks_employees
-            FOREIGN KEY (id_employee)
-            REFERENCES employees (id_employee);
-            )
+            FOREIGN KEY (employee_id)
+            REFERENCES employees (employee_id);
         </sql>
     </changeSet>
 
-    <changeSet id="5" author="Sonin">
+    <changeSet id="10" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_tasks_statuses"/>
             </not>
-            <columnExists tableName="tasks" columnName="id_status"/>
-            <columnExists tableName="tasks_statuses" columnName="id_status"/>
+            <columnExists tableName="tasks" columnName="status_id"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
         </preConditions>
         <sql>
             alter table tasks
-            (
             ADD CONSTRAINT fk_tasks_tasks_statuses
-            FOREIGN KEY (id_status)
-            REFERENCES tasks_statuses (id_status);
-            )
+            FOREIGN KEY (status_id)
+            REFERENCES tasks_statuses (status_id);
         </sql>
     </changeSet>
 
-    <changeSet id="6" author="Sonin">
+    <changeSet id="11" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <!--<indexExists indexName="i_tasks_employees"/> -->
-                <!-- <indexExists tableName="tasks" columnName="id_employee"/>  -->
-                <indexExists tableName="tasks" columnNames="id_employee" />
+                <indexExists tableName="tasks" columnNames="employee_id" />
             </not>
-            <columnExists tableName="tasks" columnName="id_employee"/>
+            <columnExists tableName="tasks" columnName="employee_id"/>
         </preConditions>
         <sql>
-            create index i_tasks_employees on tasks (id_employee);
+            create index i_tasks_employees on tasks (employee_id);
         </sql>
     </changeSet>
 
-    <changeSet id="7" author="Sonin">
+    <changeSet id="12" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks" columnNames="id_status"/>
+                <indexExists tableName="tasks" columnNames="status_id"/>
             </not>
-            <columnExists tableName="tasks" columnName="id_status"/>
+            <columnExists tableName="tasks" columnName="status_id"/>
         </preConditions>
         <sql>
-            create index i_tasks_statuses on tasks (id_status);
+            create index i_tasks_statuses on tasks (status_id);
         </sql>
     </changeSet>
 
-    <changeSet id="8" author="Sonin">
+    <changeSet id="13" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="tasks_relations_types"/>
@@ -126,13 +184,38 @@
         <sql>
             create table tasks_relations_types
             (
-            id_relation NUMBER(3) primary KEY,
-            relation_type varchar2(50 char) not null unique
+            relation_id NUMBER(3),
+            relation_type varchar2(50 char) not null
             );
         </sql>
     </changeSet>
 
-    <changeSet id="9" author="Sonin">
+    <changeSet id="14" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_tasks_relations_types" tableName="tasks_relations_types" />
+            </not>
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_relations_types
+            ADD CONSTRAINT pk_tasks_relations_types PRIMARY KEY (relation_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="15" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_relations_types" columnNames="relation_type"/>
+            </not>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+        </preConditions>
+        <sql>
+            create UNIQUE index i_tasks_relations_types_relation_type on tasks_relations_types (relation_type);
+        </sql>
+    </changeSet>
+
+    <changeSet id="16" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="comments"/>
@@ -141,76 +224,85 @@
         <sql>
             create table comments
             (
-            id_comment NUMBER(30) primary KEY,
-            id_task Number(30) not null,
-            id_employee Number(6) not null,
+            comment_id NUMBER(30),
+            task_id Number(30) not null,
+            employee_id Number(6) not null,
             text varchar2(500 char) not null,
-            date_of_creation DATE not null
+            registered_date DATE not null
             );
         </sql>
     </changeSet>
 
-    <changeSet id="10" author="Sonin">
+    <changeSet id="17" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_comments" tableName="comments" />
+            </not>
+            <columnExists tableName="comments" columnName="comment_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE comments
+            ADD CONSTRAINT pk_comments PRIMARY KEY (comment_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="18" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_comments_employees"/>
             </not>
-            <columnExists tableName="comments" columnName="id_employee"/>
-            <columnExists tableName="employees" columnName="id_employee"/>
+            <columnExists tableName="comments" columnName="employee_id"/>
+            <columnExists tableName="employees" columnName="employee_id"/>
         </preConditions>
         <sql>
             alter table comments
-            (
             ADD CONSTRAINT fk_comments_employees
-            FOREIGN KEY (id_employee)
-            REFERENCES employees (id_employee);
-            )
+            FOREIGN KEY (employee_id)
+            REFERENCES employees (employee_id);
         </sql>
     </changeSet>
 
-    <changeSet id="11" author="Sonin">
+    <changeSet id="19" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_comments_tasks"/>
             </not>
-            <columnExists tableName="comments" columnName="id_task"/>
-            <columnExists tableName="tasks" columnName="id_task"/>
+            <columnExists tableName="comments" columnName="task_id"/>
+            <columnExists tableName="tasks" columnName="task_id"/>
         </preConditions>
         <sql>
             alter table comments
-            (
             ADD CONSTRAINT fk_comments_tasks
-            FOREIGN KEY (id_task)
-            REFERENCES tasks (id_task);
-            )
+            FOREIGN KEY (task_id)
+            REFERENCES tasks (task_id);
         </sql>
     </changeSet>
 
-    <changeSet id="12" author="Sonin">
+    <changeSet id="20" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="comments" columnNames="id_employee"/>
+                <indexExists tableName="comments" columnNames="employee_id"/>
             </not>
-            <columnExists tableName="comments" columnName="id_employee"/>
+            <columnExists tableName="comments" columnName="employee_id"/>
         </preConditions>
         <sql>
-            create index i_comments_employees on comments (id_employee);
+            create index i_comments_employees on comments (employee_id);
         </sql>
     </changeSet>
 
-    <changeSet id="13" author="Sonin">
+    <changeSet id="21" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="comments" columnNames="id_task"/>
+                <indexExists tableName="comments" columnNames="task_id"/>
             </not>
-            <columnExists tableName="comments" columnName="id_task"/>
+            <columnExists tableName="comments" columnName="task_id"/>
         </preConditions>
         <sql>
-            create index i_comments_tasks on comments (id_task);
+            create index i_comments_tasks on comments (task_id);
         </sql>
     </changeSet>
 
-    <changeSet id="14" author="Sonin">
+    <changeSet id="22" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="tasks_relationships"/>
@@ -219,105 +311,112 @@
         <sql>
             create table tasks_relationships
             (
-            id_relationship Number(30) primary KEY,
-            id_task1 Number(30) not null,
-            id_task2 Number(30) not null,
-            id_relation NUMBER(3) not null
+            relationship_id Number(30),
+            task1_id Number(30) not null,
+            task2_id Number(30) not null,
+            relation_id NUMBER(3) not null
             );
         </sql>
     </changeSet>
 
-    <changeSet id="15" author="Sonin">
+    <changeSet id="23" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_tasks_relationships" tableName="tasks_relationships" />
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="relationship_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_relationships
+            ADD CONSTRAINT pk_tasks_relationships PRIMARY KEY (relationship_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="24" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks1"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_task1"/>
-            <columnExists tableName="tasks" columnName="id_task"/>
+            <columnExists tableName="tasks_relationships" columnName="task_id1"/>
+            <columnExists tableName="tasks" columnName="task_id"/>
         </preConditions>
         <sql>
-            alter table comments
-            (
+            alter table tasks_relationships
             ADD CONSTRAINT fk_tasks_relationships_tasks1
-            FOREIGN KEY (id_task1)
-            REFERENCES tasks (id_task);
-            )
+            FOREIGN KEY (task_id1)
+            REFERENCES tasks (task_id);
         </sql>
     </changeSet>
 
-    <changeSet id="16" author="Sonin">
+    <changeSet id="25" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks2"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_task2"/>
-            <columnExists tableName="tasks" columnName="id_task"/>
+            <columnExists tableName="tasks_relationships" columnName="task_id2"/>
+            <columnExists tableName="tasks" columnName="task_id"/>
         </preConditions>
         <sql>
-            alter table comments
-            (
+            alter table tasks_relationships
             ADD CONSTRAINT fk_tasks_relationships_tasks2
-            FOREIGN KEY (id_task2)
-            REFERENCES tasks (id_task);
-            )
+            FOREIGN KEY (task_id2)
+            REFERENCES tasks (task_id);
         </sql>
     </changeSet>
 
-    <changeSet id="17" author="Sonin">
+    <changeSet id="26" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_relations"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_relation"/>
-            <columnExists tableName="tasks_relations_types" columnName="id_relation"/>
+            <columnExists tableName="tasks_relationships" columnName="relation_id"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
         </preConditions>
         <sql>
-            alter table comments
-            (
+            alter table tasks_relationships
             ADD CONSTRAINT fk_tasks_relationships_relations
-            FOREIGN KEY (id_relation)
-            REFERENCES tasks_relations_types (id_relation);
-            )
+            FOREIGN KEY (relation_id)
+            REFERENCES tasks_relations_types (relation_id);
         </sql>
     </changeSet>
 
-    <changeSet id="18" author="Sonin">
+    <changeSet id="27" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks_relationships" columnNames="id_task1"/>
+                <indexExists tableName="tasks_relationships" columnNames="task_id1"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_task1"/>
+            <columnExists tableName="tasks_relationships" columnName="task_id1"/>
         </preConditions>
         <sql>
-            create index i_tasks_relationships_tasks1 on tasks_relationships (id_task1);
+            create index i_tasks_relationships_tasks1 on tasks_relationships (task_id1);
         </sql>
     </changeSet>
 
-    <changeSet id="19" author="Sonin">
+    <changeSet id="28" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks_relationships" columnNames="id_task2"/>
+                <indexExists tableName="tasks_relationships" columnNames="task_id2"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_task2"/>
+            <columnExists tableName="tasks_relationships" columnName="task_id2"/>
         </preConditions>
         <sql>
-            create index i_tasks_relationships_tasks2 on tasks_relationships (id_task2);
+            create index i_tasks_relationships_tasks2 on tasks_relationships (task_id2);
         </sql>
     </changeSet>
 
-    <changeSet id="20" author="Sonin">
+    <changeSet id="29" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks_relationships" columnNames="id_relation"/>
+                <indexExists tableName="tasks_relationships" columnNames="relation_id"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="id_relation"/>
+            <columnExists tableName="tasks_relationships" columnName="relation_id"/>
         </preConditions>
         <sql>
-            create index i_tasks_relationships_relations on tasks_relationships (id_relation);
+            create index i_tasks_relationships_relations on tasks_relationships (relation_id);
         </sql>
     </changeSet>
 
-    <changeSet id="21" author="Sonin">
+    <changeSet id="30" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="sequence_employee_id"/>
@@ -328,7 +427,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="22" author="Sonin">
+    <changeSet id="31" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="sequence_task_id"/>
@@ -339,7 +438,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="23" author="Sonin">
+    <changeSet id="32" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="sequence_tasks_relationship_id"/>
@@ -350,7 +449,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="24" author="Sonin">
+    <changeSet id="33" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="sequence_comment_id"/>

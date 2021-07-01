@@ -1,8 +1,6 @@
 package com.example.demojira.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.ValueGenerationType;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,10 +11,9 @@ import java.util.Date;
 public class Employee {
     //добавить имя и фамилию?
 
-
     @Id
     @Schema(description = "id сотрудника", accessMode = Schema.AccessMode.READ_ONLY)
-    @Column(name = "Id_employee")
+    @Column(name = "employee_id")
     //field
     @SequenceGenerator(name = "sei", sequenceName="sequence_employee_id", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sei")
@@ -39,9 +36,9 @@ public class Employee {
 
 
     //@Enumerated(EnumType.STRING)
-    @Schema(description = "состояние записи (false == заблокирована)", accessMode = Schema.AccessMode.READ_ONLY)
-    @Column(name = "status")
-    private Boolean status;
+    @Schema(description = "состояние сотрудника (false == заблокирован)", accessMode = Schema.AccessMode.READ_ONLY)
+    @Column(name = "active")
+    private Boolean active;
 
     public Integer getId() {
         return id;
@@ -75,11 +72,11 @@ public class Employee {
         this.registeredDate = registeredDate;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

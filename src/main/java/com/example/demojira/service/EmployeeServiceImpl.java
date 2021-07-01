@@ -4,7 +4,6 @@ import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,7 +18,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public void registrateEmployee(Employee employee) {
         employee.setRegisteredDate(new Date());
-        employee.setStatus(true);
+        employee.setActive(true);
         employeeRepository.save(employee);
     }
 
@@ -29,8 +28,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getById(Integer id) {
-        return employeeRepository.getById(id);
+    public Employee getById(Integer employeeId) {
+        return employeeRepository.getById(employeeId);
     }
 
 
@@ -49,11 +48,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     //@Transactional
     @Override
-    public void changeStatus(Integer id_employee) {
-        Employee e = getById(id_employee);
-        e.setStatus(!e.getStatus());
+    public void changeActive(Integer employeeId) {
+        Employee e = getById(employeeId);
+        e.setActive(!e.getActive());
         employeeRepository.save(e);
-
     }
 
 

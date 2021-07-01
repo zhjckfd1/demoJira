@@ -82,7 +82,7 @@ public class EmployeeController {
     )
     @RequestMapping(value = "/employees/{id}/changeStatus",  method = RequestMethod.PUT)
     public ResponseEntity<?> changeStatus(@PathVariable(name = "id") @Parameter(description = "id сотрудника") Integer id) {
-        employeeService.changeStatus(id);
+        employeeService.changeActive(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
