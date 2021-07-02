@@ -25,6 +25,7 @@ public class Comment {
     @JoinColumn(name = "client_id", nullable = false)
     */
     //@JoinColumn(name="task_id")
+    @Schema(description = "задача, к которой написан комментарий")
     @ManyToOne
     private Task task;
 
@@ -36,6 +37,7 @@ public class Comment {
      */
 
     //@JoinColumn(name="employee_id")
+    @Schema(description = "сотрудник, написавший комментарий")
     @ManyToOne
     private Employee employee;
 

@@ -1,5 +1,7 @@
 package com.example.demojira.service;
 
+import com.example.demojira.DTO.TaskGetDto;
+import com.example.demojira.DTO.TaskRegistrateDto;
 import com.example.demojira.model.Employee;
 import com.example.demojira.model.Task;
 
@@ -8,7 +10,7 @@ import java.util.List;
 public interface TaskService {
 
     // /tasks
-    void addTask(Task task);
+    void addTask(TaskRegistrateDto task);
 
     /*
     //получить все задачи сотрудника
@@ -24,8 +26,8 @@ public interface TaskService {
     Boolean updateStatus(Integer taskId, Integer statusId);
 
     // /tasks/taskId
-    Task getById(Integer taskId);
+    TaskGetDto getById(Integer taskId);
 
     // /tasks
-    List<Task> getAllTasks();
+    List<TaskGetDto> getAllTasks();
 }

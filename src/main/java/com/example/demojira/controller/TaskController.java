@@ -1,6 +1,8 @@
 package com.example.demojira.controller;
 
 
+import com.example.demojira.DTO.TaskGetDto;
+import com.example.demojira.DTO.TaskRegistrateDto;
 import com.example.demojira.model.Employee;
 import com.example.demojira.model.Task;
 import com.example.demojira.service.EmployeeService;
@@ -33,7 +35,7 @@ public class TaskController {
             description = "Позволяет создать задачу"
     )
     @RequestMapping(value = "/tasks",  method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody Task task) {
+    public ResponseEntity<?> create(@RequestBody TaskRegistrateDto task) {
         taskService.addTask(task);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -44,8 +46,8 @@ public class TaskController {
             description = "Позволяет получить все созданные задачи"
     )
     @RequestMapping(value = "/tasks",  method = RequestMethod.GET)
-    public ResponseEntity<List<Task>> read() {
-        final List<Task> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskGetDto>> read() {
+        final List<TaskGetDto> tasks = taskService.getAllTasks();
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -57,8 +59,8 @@ public class TaskController {
             description = "Позволяет получить задачу по ее id"
     )
     @RequestMapping(value = "/tasks/{id}",  method = RequestMethod.GET)
-    public ResponseEntity<Task> read(@PathVariable(name = "id") @Parameter(description = "id задачи") @Min(1) Integer id) {
-        final Task task = taskService.getById(id);
+    public ResponseEntity<TaskGetDto> read(@PathVariable(name = "id") @Parameter(description = "id задачи") @Min(1) Integer id) {
+        final TaskGetDto task = taskService.getById(id);
 
         return task != null
                 ? new ResponseEntity<>(task, HttpStatus.OK)
@@ -78,6 +80,6 @@ public class TaskController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
+    //связать задачи?     редактировать связь?          статус связи поменять н можем?
 
 }

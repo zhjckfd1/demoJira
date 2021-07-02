@@ -45,6 +45,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "employee")
+    private List<Task> tasks;
+
     public Integer getId() {
         return id;
     }

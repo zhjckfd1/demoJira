@@ -1,15 +1,15 @@
 package com.example.demojira.service;
 
+import com.example.demojira.DTO.TaskGetDto;
+import com.example.demojira.DTO.TaskRegistrateDto;
 import com.example.demojira.model.Task;
-import com.example.demojira.model.TaskStatus;
-import com.example.demojira.repository.EmployeeRepository;
 import com.example.demojira.repository.TaskRepository;
 import com.example.demojira.repository.TaskStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -23,10 +23,9 @@ public class TaskServiceImpl implements TaskService{
 
 
     @Override
-    public void addTask(Task task) {
-        //проверка сотрудника?   (через репозиторий?)
-        task.setRegisteredDate(new Date());
-        task.setStatusId(0);    //?    (назначена)
+    public void addTask(TaskRegistrateDto trd) {
+        //как статус назначаем?
+        Task task = MappingUtils.mapToEntityFromTaskRegistrateDto(trd, taskStatusRepository.getById(0));
         taskRepository.save(task);
     }
 
@@ -50,7 +49,7 @@ public class TaskServiceImpl implements TaskService{
     //проверка статуса?
         if (taskRepository.findById(taskId).isPresent()  && taskStatusRepository.findById(statusId).isPresent()) {
             Task task = taskRepository.getById(taskId);
-            task.setStatusId(statusId);
+            task.setStatus(taskStatusRepository.getById(statusId));
             taskRepository.save(task);
             return true;
         }
@@ -58,12 +57,13 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public Task getById(Integer taskId) {
-        return taskRepository.getById(taskId);
+    public TaskGetDto getById(Integer taskId) {
+        return MappingUtils.mapToTaskGetDto(taskRepository.getById(taskId));
+        //return taskRepository.getById(taskId);
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<TaskGetDto> getAllTasks() {
+        return taskRepository.findAll().stream().map(MappingUtils::mapToTaskGetDto).collect(Collectors.toList());
     }
 }

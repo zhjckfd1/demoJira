@@ -1,11 +1,11 @@
 package com.example.demojira.controller;
 
+import com.example.demojira.DTO.CommentAddDto;
 import com.example.demojira.DTO.CommentDto;
+import com.example.demojira.DTO.CommentEmployeeDto;
+import com.example.demojira.DTO.CommentTaskDto;
 import com.example.demojira.model.Comment;
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.Task;
 import com.example.demojira.service.CommentService;
-import com.example.demojira.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,14 +31,15 @@ public class CommentController {
     }
 
 
+    //dto?
     @Operation(
             summary = "Создание комментария",
             description = "Позволяет создать комментарий"
     )
     //@PostMapping(value = "/comments")
     @RequestMapping(value = "/comments",  method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody Comment comment) {
-        commentService.addComment(comment);
+    public ResponseEntity<?> create(@RequestBody CommentAddDto commentAddDto) {
+        commentService.addComment(commentAddDto);
         //return ResponseEntity.ok().body(HttpStatus.CREATED);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -64,8 +65,8 @@ public class CommentController {
             description = "Позволяет получить все комментарии к задаче"
     )
     @RequestMapping(value = "/comments/tasks/{taskId}",  method = RequestMethod.GET)
-    public ResponseEntity<List<CommentDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
-        final List<CommentDto> comments = commentService.getAllCommentsOnTheTask(taskId);
+    public ResponseEntity<List<CommentTaskDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
+        final List<CommentTaskDto> comments = commentService.getAllCommentsOnTheTask(taskId);
         return comments != null && !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -73,12 +74,12 @@ public class CommentController {
 
 
     @Operation(
-            summary = "Получение списка комментариев пользотеля",
+            summary = "Получение списка комментариев пользователя",
             description = "Позволяет получить все комментарии пользователя"
     )
     @RequestMapping(value = "/comments/employees/{employeeId}",  method = RequestMethod.GET)
-    public ResponseEntity<List<CommentDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
-        final List<CommentDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
+    public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
+        final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
         return comments != null && !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -90,7 +91,7 @@ public class CommentController {
             description = "Позволяет получить комментарий по его id"
     )
     @RequestMapping(value = "/comments/{id}",  method = RequestMethod.GET)
-    public ResponseEntity<CommentDto> read(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
+    public ResponseEntity<CommentDto> read(@PathVariable(name = "id") @Parameter(description = "id комментария") @Min(1) Integer id) {
         final CommentDto comment = commentService.getById(id);
 
         return comment != null

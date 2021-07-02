@@ -1,6 +1,9 @@
 package com.example.demojira.service;
 
+import com.example.demojira.DTO.CommentAddDto;
 import com.example.demojira.DTO.CommentDto;
+import com.example.demojira.DTO.CommentEmployeeDto;
+import com.example.demojira.DTO.CommentTaskDto;
 import com.example.demojira.model.Comment;
 import com.example.demojira.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +21,18 @@ public class CommentServiceImpl implements CommentService{
     private CommentRepository commentRepository;
 
     @Override
-    public List<CommentDto> getAllCommentsOnTheTask(Integer taskId) {
-        return commentRepository.getAllCommentsOnTheTask(taskId).stream().map(MappingUtils::mapToCommentDto).collect(Collectors.toList());
+    public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
+        return commentRepository.getAllCommentsOnTheTask(taskId).stream().map(MappingUtils::mapToCommentTaskDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<CommentDto> getAllCommentsOnTheEmployee(Integer employeeId) {
-        return commentRepository.getAllCommentsOnTheEmployee(employeeId).stream().map(MappingUtils::mapToCommentDto).collect(Collectors.toList());
+    public List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId) {
+        return commentRepository.getAllCommentsOnTheEmployee(employeeId).stream().map(MappingUtils::mapToCommentEmployeeDto).collect(Collectors.toList());
     }
 
     @Override
-    public void addComment(Comment comment) {
-        comment.setCreatedDate(new Date());
+    public void addComment(CommentAddDto commentAddDto) {
+        Comment comment = MappingUtils.mapToEntityFromCommentAddDto(commentAddDto);
         commentRepository.save(comment);
     }
 

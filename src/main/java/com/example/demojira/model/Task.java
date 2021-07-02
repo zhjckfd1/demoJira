@@ -17,15 +17,24 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sti")
     private Integer id;
 
+    /*
     @Schema(description = "id статуса задачи", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "status_id")
     private Integer statusId;
+    */
 
+    @ManyToOne
+    private TaskStatus status;
 
     //???
+    /*
     @Schema(description = "id сотрудника, выполняющего задачу", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "employee_id")
     private Integer employeeId;
+    */
+
+    @ManyToOne
+    private Employee employee;
 
     @Schema(description = "наименование задачи", example = "Тестовая задача")
     @Column(name = "title")
@@ -51,20 +60,20 @@ public class Task {
         this.id = id;
     }
 
-    public Integer getStatusId() {
-        return statusId;
+    public TaskStatus getStatus() {
+        return status;
     }
 
-    public void setStatusId(Integer statusId) {
-        this.statusId = statusId;
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
-    public Integer getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public String getTitle() {

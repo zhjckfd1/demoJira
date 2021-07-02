@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Hidden
@@ -21,6 +22,8 @@ public class TaskStatus {
     @Column(name = "status")
     private String status;
 
+    @OneToMany(mappedBy = "status")
+    private List<Task> tasks;
     //enum?
     //добавляем через liquibase?
     //https://www.baeldung.com/jpa-entities     (2.7) (сломается, если переименовать значения?)

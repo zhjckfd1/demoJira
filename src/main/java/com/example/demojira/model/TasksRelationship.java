@@ -17,20 +17,37 @@ public class TasksRelationship {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stri")
     private Integer id;
 
-
+    /*
     //какое наименование является корректным?  Как связываем?
     @Schema(description = "Id основной задачи", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "task1_id")
     private String task1Id;
+    */
+
+    @OneToOne
+    @Schema(description = "основная задача")
+    private Task task1;
 
 
+    /*
     //какое наименование является корректным?  Как связываем?
     @Schema(description = "Id дополнительной задачи", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "task2_id")
-    private String task2Id;
+    private String task2Id;*/
 
+    @OneToOne
+    @Schema(description = "дополнительная задача")
+    private Task task2;
+
+    /*
     //какое наименование является корректным?  Как связываем?
     @Schema(description = "Id связи между задачами (основной к дополнительной)", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "relation_id")
     private String relationId;
+    */
+
+    @Schema(description = "тип связи между задачами (основной к дополнительной)", accessMode = Schema.AccessMode.READ_ONLY)
+    @ManyToOne
+    private TasksRelationsType tasksRelationsType;
+
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Hidden
@@ -20,10 +21,12 @@ public class TasksRelationsType {
     //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stri")
     private Integer id;
 
-
     @Schema(description = "вид связи между задачами", example = "блокирует")
     @Column(name = "relation_type")
     private String relationType;
+
+    @OneToMany(mappedBy = "tasksRelationsType")
+    private List<TasksRelationship> tasksRelationships;
 
     //enum?
     //@Converter?      //https://www.baeldung.com/jpa-persisting-enums-in-jpa   ?

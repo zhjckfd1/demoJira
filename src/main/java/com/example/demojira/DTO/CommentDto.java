@@ -10,32 +10,12 @@ import java.util.Date;
 
 //нужны все поля, ничего не добавляем/убираем?
 public class CommentDto {
-    Integer id;
-    Task task;    //только id?
-    Employee employee;      //только id?
-    String text;
-    Date createdDate;
+    private Task task;    //только id?
+    private Employee employee;      //только id?
+    private String text;
+    private Date createdDate;
 
-    //toString?
 
-    /*
-    public CommentDto mapToCommentDto(Comment entity){
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(entity.getId());
-        commentDto.setTask(entity.getTask());
-        commentDto.setEmployee(entity.getEmployee());
-        commentDto.setText(entity.getText());
-        commentDto.setCreatedDate(entity.getCreatedDate());
-        return commentDto;
-    }*/
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Task getTask() {
         return task;
