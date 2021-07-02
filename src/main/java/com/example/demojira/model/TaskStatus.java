@@ -23,4 +23,5 @@ public class TaskStatus {
 
     //enum?
     //добавляем через liquibase?
+    //https://www.baeldung.com/jpa-entities     (2.7) (сломается, если переименовать значения?)
 }

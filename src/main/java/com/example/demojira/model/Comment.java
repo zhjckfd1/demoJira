@@ -3,13 +3,16 @@ package com.example.demojira.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
 import java.util.Date;
+import java.util.List;
 
+//@Data   (Lombok)   ?
 @Entity
 @Schema(description = "Сущность комментария")
-@Table(name = "comments")
+@Table(name = "comments") //, schema="SONIN"
 public class Comment {
+    //toString() для корректного вывода?
+
     @Id
     @Column(name = "comment_id")
     @Schema(description = "id комментария", accessMode = Schema.AccessMode.READ_ONLY)
@@ -21,22 +24,34 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "client_id", nullable = false)
     */
+    //@JoinColumn(name="task_id")
+    @ManyToOne
+    private Task task;
 
+
+    /*
     @Schema(description = "id задачи, к которой относится комментарий", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "task_id")
     private Integer taskId;
+     */
 
+    //@JoinColumn(name="employee_id")
+    @ManyToOne
+    private Employee employee;
+
+    /*
     @Schema(description = "id сотрудника, создавшего комментарий", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "employee_id")
     private Integer employeeId;
+    */
 
     @Schema(description = "текст комментария", example = "текст комментария")
     @Column(name = "text")
     private String text;
 
     @Schema(description = "дата создания комментария", accessMode = Schema.AccessMode.READ_ONLY)
-    @Column(name = "registered_date")
-    private Date registeredDate;
+    @Column(name = "created_date")
+    private Date createdDate;
 
     public Integer getId() {
         return id;
@@ -46,20 +61,20 @@ public class Comment {
         this.id = id;
     }
 
-    public Integer getTaskId() {
-        return taskId;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTaskId(Integer taskId) {
-        this.taskId = taskId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
-    public Integer getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public String getText() {
@@ -70,11 +85,11 @@ public class Comment {
         this.text = text;
     }
 
-    public Date getRegisteredDate() {
-        return registeredDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setRegisteredDate(Date registeredDate) {
-        this.registeredDate = registeredDate;
+    public void setCreatedDate(Date registeredDate) {
+        this.createdDate = registeredDate;
     }
 }

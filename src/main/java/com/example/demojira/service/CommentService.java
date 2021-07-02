@@ -1,5 +1,6 @@
 package com.example.demojira.service;
 
+import com.example.demojira.DTO.CommentDto;
 import com.example.demojira.model.Comment;
 import com.example.demojira.model.Employee;
 import org.springframework.data.jpa.repository.Query;
@@ -13,13 +14,13 @@ public interface CommentService {
     void addComment(Comment comment);
 
     //нужен?
-    List<Comment> getAll();
+    List<CommentDto> getAll();
 
-    List<Comment> getAllCommentsOnTheTask(Integer taskId);
+    List<CommentDto> getAllCommentsOnTheTask(Integer taskId);
 
-    List<Comment> getAllCommentsOnTheEmployee(Integer employeeId);
+    List<CommentDto> getAllCommentsOnTheEmployee(Integer employeeId);
 
-    Comment getById(Integer commentId);
+    CommentDto getById(Integer commentId);
 
     //update?    (не комментируем)
     //Boolean editComment(Comment comment);

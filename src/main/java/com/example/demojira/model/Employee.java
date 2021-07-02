@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Schema(description = "Сущность сотрудника")
@@ -39,6 +40,10 @@ public class Employee {
     @Schema(description = "состояние сотрудника (false == заблокирован)", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "active")
     private Boolean active;
+
+    //@JoinColumn(name="employee_id")
+    @OneToMany(mappedBy = "employee")
+    private List<Comment> comments;
 
     public Integer getId() {
         return id;

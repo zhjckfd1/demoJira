@@ -26,5 +26,7 @@ public class TasksRelationsType {
     private String relationType;
 
     //enum?
+    //@Converter?      //https://www.baeldung.com/jpa-persisting-enums-in-jpa   ?
     //добавляем через liquibase?
+    //https://www.baeldung.com/jpa-entities     (2.7) (сломается, если переименовать значения?)
 }

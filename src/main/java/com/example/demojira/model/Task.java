@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Schema(description = "Сущность задачи")
@@ -37,6 +38,10 @@ public class Task {
     @Schema(description = "дата создания задачи", accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "registered_date")
     private Date registeredDate;
+
+    //@JoinColumn(name="task_id")
+    @OneToMany(mappedBy = "task")
+    private List<Comment> comments;
 
     public Integer getId() {
         return id;
