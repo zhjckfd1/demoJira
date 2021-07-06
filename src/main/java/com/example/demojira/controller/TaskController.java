@@ -43,9 +43,7 @@ public class TaskController {
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
     public ResponseEntity<List<TaskGetDto>> read() {
         final List<TaskGetDto> tasks = taskService.getAllTasks();
-        return !tasks.isEmpty()
-                ? new ResponseEntity<>(tasks, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @Operation(
@@ -98,9 +96,7 @@ public class TaskController {
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.GET)
     public ResponseEntity<List<TaskRelationshipDto>> readAllTasksRelationships() {
         final List<TaskRelationshipDto> tasksRelationships = taskService.getAllTasksRelationships();
-        return !tasksRelationships.isEmpty()
-                ? new ResponseEntity<>(tasksRelationships, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(tasksRelationships, HttpStatus.OK);
     }
 
     @Operation(

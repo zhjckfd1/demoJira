@@ -47,10 +47,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employees",  method = RequestMethod.GET)
     public ResponseEntity<List<EmployeeGetDto>> read() {
         final List<EmployeeGetDto> employees = employeeService.getAll();
-        //return employees != null && !employees.isEmpty()
-        return !employees.isEmpty()
-                ? new ResponseEntity<>(employees, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @Operation(
@@ -72,20 +69,14 @@ public class EmployeeController {
     @RequestMapping(value = "/employees/{id}",  method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id, @RequestBody EmployeeUpdateDto employee) {
         employeeService.editEmployee(id, employee);
-        return new ResponseEntity<>(HttpStatus.OK);    //???
-        /*
-        Boolean updated = employeeService.editEmployee(id, employee);
-        return updated
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        */
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(
             summary = "Изменение статуса сотрудника",
             description = "Меняет статус сотрудника на противоположный"
     )
-    //?
+
     //@Hidden
     ///employees/{id}/changeStatus
     @RequestMapping(value = "/employees/{id}/changeActive",  method = RequestMethod.PATCH)

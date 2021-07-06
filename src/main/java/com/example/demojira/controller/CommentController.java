@@ -30,7 +30,6 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-
     //dto?
     @Operation(
             summary = "Создание комментария",
@@ -44,7 +43,6 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
     @Operation(
             summary = "Получение списка комментариев",
             description = "Позволяет получить все созданные комментарии"
@@ -53,14 +51,8 @@ public class CommentController {
     public ResponseEntity<List<CommentDto>> read() {
         final List<CommentDto> comments = commentService.getAll();
         //return comments != null && !comments.isEmpty()
-        return !comments.isEmpty()
-                ? new ResponseEntity<>(comments, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
-
-    //"/comments/tasks/{taskId}"   с TaskController не соединится?
-    //"/comments/getTaskComments/{taskId}"           ?
 
     @Operation(
             summary = "Получение списка комментариев к задаче",
@@ -70,9 +62,11 @@ public class CommentController {
     public ResponseEntity<List<CommentTaskDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
         final List<CommentTaskDto> comments = commentService.getAllCommentsOnTheTask(taskId);
         //return comments != null && !comments.isEmpty()
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+        /*
         return !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);*/
     }
 
 
@@ -83,9 +77,11 @@ public class CommentController {
     @RequestMapping(value = "/comments/employees/{employeeId}",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
         final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+        /*
         return !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);*/
     }
 
 
