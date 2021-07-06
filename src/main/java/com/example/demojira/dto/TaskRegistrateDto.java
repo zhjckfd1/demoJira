@@ -1,18 +1,19 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
 import com.example.demojira.model.Employee;
 
 public class TaskRegistrateDto {
-    Employee employee;
+    Integer employeeId;
     String title;
     String description;
 
-    public Employee getEmployee() {
-        return employee;
+
+    public Integer getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getTitle() {

@@ -1,15 +1,19 @@
 package com.example.demojira.service;
 
-import com.example.demojira.DTO.CommentAddDto;
-import com.example.demojira.DTO.CommentDto;
-import com.example.demojira.DTO.CommentEmployeeDto;
-import com.example.demojira.DTO.CommentTaskDto;
+import com.example.demojira.dto.CommentAddDto;
+import com.example.demojira.dto.CommentDto;
+import com.example.demojira.dto.CommentEmployeeDto;
+import com.example.demojira.dto.CommentTaskDto;
 import com.example.demojira.model.Comment;
+import com.example.demojira.model.Employee;
+import com.example.demojira.model.Task;
 import com.example.demojira.repository.CommentRepository;
+import com.example.demojira.repository.EmployeeRepository;
+import com.example.demojira.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +23,11 @@ public class CommentServiceImpl implements CommentService{
     //@Inject
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
 
     @Override
     public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
@@ -32,16 +41,12 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void addComment(CommentAddDto commentAddDto) {
-        Comment comment = MappingUtils.mapToEntityFromCommentAddDto(commentAddDto);
+        Task task = taskRepository.findById(commentAddDto.getTaskId()).orElseThrow(EntityNotFoundException::new);
+        Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId()).orElseThrow(EntityNotFoundException::new);
+
+        Comment comment = MappingUtils.mapToEntityFromCommentAddDto(commentAddDto, task, employee);
         commentRepository.save(comment);
     }
-
-    /*
-    @Override
-    public List<Comment> getAll() {
-
-        return commentRepository.findAll();
-    }*/
 
     @Override
     public List<CommentDto> getAll() {
@@ -51,19 +56,5 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public CommentDto getById(Integer commentId) {
         return MappingUtils.mapToCommentDto(commentRepository.getById(commentId));
-        //return MappingUtils.mapToCommentDto(commentRepository.findById(commentId).orElse(new Comment()));
     }
-
-    /*
-    //@Transactional
-    @Override
-    public Boolean editComment(Comment comment) {
-        boolean update = commentRepository.findById(comment.getId()).isPresent();
-        if (update) {
-            commentRepository.save(comment);
-            return true;
-        }
-        else return false;
-    }
-     */
 }

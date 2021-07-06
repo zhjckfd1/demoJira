@@ -1,12 +1,14 @@
 package com.example.demojira.service;
 
-import com.example.demojira.DTO.EmployeeGetDto;
-import com.example.demojira.DTO.EmployeeRegistrateDto;
+import com.example.demojira.dto.EmployeeGetDto;
+import com.example.demojira.dto.EmployeeRegistrateDto;
+import com.example.demojira.dto.EmployeeUpdateDto;
 import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,17 +40,13 @@ public class EmployeeServiceImpl implements EmployeeService{
     //как правильно?
     //@Transactional
     @Override
-    public Boolean editEmployee(Integer employeeId, EmployeeRegistrateDto erd) {
-        //getById(employee.getId())
-        boolean update = employeeRepository.findById(employeeId).isPresent();
-        if (update) {
-            Employee employee = employeeRepository.getById(employeeId);
-            employee.setLogin(erd.getLogin());
-            employee.setPassword(erd.getPassword());
+    public void editEmployee(Integer employeeId, EmployeeUpdateDto employeeDto) {
+        employeeRepository.findById(employeeId).ifPresentOrElse(employee -> {
+            employee.setPassword(employeeDto.getPassword());
             employeeRepository.save(employee);
-            return true;
-        }
-        else return false;
+        }, () -> {
+            throw new EntityNotFoundException();
+        });
     }
 
 

@@ -1,15 +1,11 @@
 package com.example.demojira.service;
 
-import com.example.demojira.DTO.TaskGetDto;
-import com.example.demojira.DTO.TaskRegistrateDto;
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.Task;
+import com.example.demojira.dto.*;
 
 import java.util.List;
 
 public interface TaskService {
 
-    // /tasks
     void addTask(TaskRegistrateDto task);
 
     /*
@@ -21,13 +17,17 @@ public interface TaskService {
     List<Task> getAllEmployeeTasksWithStatus(Integer employeeId, Integer statusId);
    */
 
-    // меняем статус задачи     (описание? сотрудника?)  (updateTask на всю задачу?)
-    //  /tasks/taskId/{statusId}     (через сотрудника?)
-    Boolean updateStatus(Integer taskId, Integer statusId);
+    void patchTask(Integer taskId, TaskUpdateDto taskUpdateDto);
 
-    // /tasks/taskId
     TaskGetDto getById(Integer taskId);
 
-    // /tasks
     List<TaskGetDto> getAllTasks();
+
+    void createRelationship(TaskRelationshipDto taskRelationshipDto);
+
+    void updateRelationship(Integer relationshipId, TaskRelationshipUpdateDto taskRelationshipUpdateDto);
+
+    List<TaskRelationshipDto> getAllTasksRelationships();
+
+    TaskRelationshipDto getRelationshipById(Integer taskRelationshipId);
 }

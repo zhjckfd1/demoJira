@@ -1,10 +1,9 @@
 package com.example.demojira.controller;
 
-import com.example.demojira.DTO.CommentAddDto;
-import com.example.demojira.DTO.CommentDto;
-import com.example.demojira.DTO.CommentEmployeeDto;
-import com.example.demojira.DTO.CommentTaskDto;
-import com.example.demojira.model.Comment;
+import com.example.demojira.dto.CommentAddDto;
+import com.example.demojira.dto.CommentDto;
+import com.example.demojira.dto.CommentEmployeeDto;
+import com.example.demojira.dto.CommentTaskDto;
 import com.example.demojira.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +18,7 @@ import java.util.List;
 
 @RestController
 //@RequestMapping(value = "/comments")
+//@RequestMapping("/comments")                  //в начале указываем?
 @Tag(name="Комментарий", description="работает с комментариями сотрудников")
 public class CommentController {
 
@@ -52,9 +52,11 @@ public class CommentController {
     @RequestMapping(value = "/comments",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentDto>> read() {
         final List<CommentDto> comments = commentService.getAll();
-        return comments != null && !comments.isEmpty()
+        //return comments != null && !comments.isEmpty()
+        return !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     //"/comments/tasks/{taskId}"   с TaskController не соединится?
@@ -67,7 +69,8 @@ public class CommentController {
     @RequestMapping(value = "/comments/tasks/{taskId}",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentTaskDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
         final List<CommentTaskDto> comments = commentService.getAllCommentsOnTheTask(taskId);
-        return comments != null && !comments.isEmpty()
+        //return comments != null && !comments.isEmpty()
+        return !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -80,7 +83,7 @@ public class CommentController {
     @RequestMapping(value = "/comments/employees/{employeeId}",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
         final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
-        return comments != null && !comments.isEmpty()
+        return !comments.isEmpty()
                 ? new ResponseEntity<>(comments, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -93,9 +96,6 @@ public class CommentController {
     @RequestMapping(value = "/comments/{id}",  method = RequestMethod.GET)
     public ResponseEntity<CommentDto> read(@PathVariable(name = "id") @Parameter(description = "id комментария") @Min(1) Integer id) {
         final CommentDto comment = commentService.getById(id);
-
-        return comment != null
-                ? new ResponseEntity<>(comment, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 }

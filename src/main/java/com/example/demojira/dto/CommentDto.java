@@ -1,6 +1,5 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
-import com.example.demojira.model.Comment;
 import com.example.demojira.model.Employee;
 import com.example.demojira.model.Task;
 
@@ -10,27 +9,25 @@ import java.util.Date;
 
 //нужны все поля, ничего не добавляем/убираем?
 public class CommentDto {
-    private Task task;    //только id?
-    private Employee employee;      //только id?
+    private Integer taskId;
+    private Integer employeeId;
     private String text;
     private Date createdDate;
 
-
-
-    public Task getTask() {
-        return task;
+    public Integer getTaskId() {
+        return taskId;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Integer getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getText() {

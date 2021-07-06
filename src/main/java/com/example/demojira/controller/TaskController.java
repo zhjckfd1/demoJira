@@ -1,11 +1,7 @@
 package com.example.demojira.controller;
 
 
-import com.example.demojira.DTO.TaskGetDto;
-import com.example.demojira.DTO.TaskRegistrateDto;
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.Task;
-import com.example.demojira.service.EmployeeService;
+import com.example.demojira.dto.*;
 import com.example.demojira.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,8 +15,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/tasks")                  //?
-@Tag(name="Задача", description="работает с задачами")
+@Tag(name = "Задача", description = "работает с задачами")
 public class TaskController {
     private final TaskService taskService;
 
@@ -34,7 +29,7 @@ public class TaskController {
             summary = "Создание задачи",
             description = "Позволяет создать задачу"
     )
-    @RequestMapping(value = "/tasks",  method = RequestMethod.POST)
+    @RequestMapping(value = "/tasks", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody TaskRegistrateDto task) {
         taskService.addTask(task);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -45,41 +40,76 @@ public class TaskController {
             summary = "Получение списка задач",
             description = "Позволяет получить все созданные задачи"
     )
-    @RequestMapping(value = "/tasks",  method = RequestMethod.GET)
+    @RequestMapping(value = "/tasks", method = RequestMethod.GET)
     public ResponseEntity<List<TaskGetDto>> read() {
         final List<TaskGetDto> tasks = taskService.getAllTasks();
-        return tasks != null && !tasks.isEmpty()
+        return !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
 
     @Operation(
             summary = "Получение задачи",
             description = "Позволяет получить задачу по ее id"
     )
-    @RequestMapping(value = "/tasks/{id}",  method = RequestMethod.GET)
+    @RequestMapping(value = "/tasks/{id}", method = RequestMethod.GET)
     public ResponseEntity<TaskGetDto> read(@PathVariable(name = "id") @Parameter(description = "id задачи") @Min(1) Integer id) {
         final TaskGetDto task = taskService.getById(id);
+        return new ResponseEntity<>(task, HttpStatus.OK);
+    }
 
-        return task != null
-                ? new ResponseEntity<>(task, HttpStatus.OK)
+    @Operation(
+            summary = "Обновление задачи",
+            description = "Позволяет изменить переменные задачи (статус задачи, назначенный сотрудник, название задачи, описание задачи)"
+    )
+    @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> changeStatus(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
+                                          @RequestBody TaskUpdateDto task) {
+        //возвращаем boolean (false - NOT_MODIFIED)  (если что-то поменяли - вернем true)   ???
+        taskService.patchTask(taskId, task);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Связывает задачи",
+            description = "Позволяет связать 2 задачи"
+    )
+    @RequestMapping(value = "/tasks/relations", method = RequestMethod.POST)
+    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) {
+        taskService.createRelationship(taskRelationshipDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Обновляет связь между задачами",
+            description = "Позволяет обновить связь между задачами"
+    )
+    @RequestMapping(value = "/tasks/relations/{relationshipId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateRelationBetweenTasks(@PathVariable(name = "relationshipId") @Parameter(description = "id связи между задачами") @Min(1) Integer relationshipId,
+                                                       @RequestBody TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
+        taskService.updateRelationship(relationshipId, taskRelationshipUpdateDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Получение списка связей задач",
+            description = "Позволяет получить список связей между задачами"
+    )
+    @RequestMapping(value = "/tasks/relations", method = RequestMethod.GET)
+    public ResponseEntity<List<TaskRelationshipDto>> readAllTasksRelationships() {
+        final List<TaskRelationshipDto> tasksRelationships = taskService.getAllTasksRelationships();
+        return !tasksRelationships.isEmpty()
+                ? new ResponseEntity<>(tasksRelationships, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Operation(
-            summary = "Обновление статуса задачи",
-            description = "Позволяет изменить статус задачи"
+            summary = "Получение связи между задачами",
+            description = "Позволяет получить связь между задачами по ее id"
     )
-    @RequestMapping(value = "/tasks/{taskId}/{statusId}",  method = RequestMethod.PUT)
-    public ResponseEntity<?> changeStatus(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
-                                          @PathVariable(name = "statusId") @Parameter(description = "id статуса") @Min(1) Integer statusId) {
-        Boolean update = taskService.updateStatus(taskId,statusId);
-        return update
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.GET)
+    public ResponseEntity<TaskRelationshipDto> readTasksRelationship(@PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
+        final TaskRelationshipDto task = taskService.getRelationshipById(id);
+        return new ResponseEntity<>(task, HttpStatus.OK);
     }
-
-    //связать задачи?     редактировать связь?          статус связи поменять н можем?
-
 }

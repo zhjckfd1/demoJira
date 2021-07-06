@@ -1,4 +1,4 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
 import java.util.Date;
 

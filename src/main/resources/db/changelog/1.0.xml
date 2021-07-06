@@ -337,13 +337,13 @@
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks1"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="task_id1"/>
+            <columnExists tableName="tasks_relationships" columnName="task1_id"/>
             <columnExists tableName="tasks" columnName="task_id"/>
         </preConditions>
         <sql>
             alter table tasks_relationships
             ADD CONSTRAINT fk_tasks_relationships_tasks1
-            FOREIGN KEY (task_id1)
+            FOREIGN KEY (task1_id)
             REFERENCES tasks (task_id);
         </sql>
     </changeSet>
@@ -353,13 +353,13 @@
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks2"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="task_id2"/>
+            <columnExists tableName="tasks_relationships" columnName="task2_id"/>
             <columnExists tableName="tasks" columnName="task_id"/>
         </preConditions>
         <sql>
             alter table tasks_relationships
             ADD CONSTRAINT fk_tasks_relationships_tasks2
-            FOREIGN KEY (task_id2)
+            FOREIGN KEY (task2_id)
             REFERENCES tasks (task_id);
         </sql>
     </changeSet>
@@ -383,24 +383,24 @@
     <changeSet id="27" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks_relationships" columnNames="task_id1"/>
+                <indexExists tableName="tasks_relationships" columnNames="task1_id"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="task_id1"/>
+            <columnExists tableName="tasks_relationships" columnName="task1_id"/>
         </preConditions>
         <sql>
-            create index i_tasks_relationships_tasks1 on tasks_relationships (task_id1);
+            create index i_tasks_relationships_tasks1 on tasks_relationships (task1_id);
         </sql>
     </changeSet>
 
     <changeSet id="28" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="tasks_relationships" columnNames="task_id2"/>
+                <indexExists tableName="tasks_relationships" columnNames="task2_id"/>
             </not>
-            <columnExists tableName="tasks_relationships" columnName="task_id2"/>
+            <columnExists tableName="tasks_relationships" columnName="task2_id"/>
         </preConditions>
         <sql>
-            create index i_tasks_relationships_tasks2 on tasks_relationships (task_id2);
+            create index i_tasks_relationships_tasks2 on tasks_relationships (task2_id);
         </sql>
     </changeSet>
 

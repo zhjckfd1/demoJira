@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="34" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks_relationships" columnName="source_task_id"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="task1_id"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relationships
+            RENAME COLUMN task1_id to source_task_id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="35" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks_relationships" columnName="subject_task_id"/>
+            </not>
+            <columnExists tableName="tasks_relationships" columnName="task2_id"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relationships
+            RENAME COLUMN task2_id to subject_task_id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="36" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <indexExists indexName="i_tasks_relationships_tasks1"/>
+        </preConditions>
+        <sql>
+            alter index i_tasks_relationships_tasks1
+            rename to i_tasks_relationships_source_task
+        </sql>
+    </changeSet>
+
+    <changeSet id="37" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks1"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relationships
+            rename constraint fk_tasks_relationships_tasks1 to fk_tasks_relationships_source_task
+        </sql>
+    </changeSet>
+
+    <changeSet id="38" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <indexExists indexName="i_tasks_relationships_tasks2"/>
+        </preConditions>
+        <sql>
+            alter index i_tasks_relationships_tasks2
+            rename to i_tasks_relationships_subject_task
+        </sql>
+    </changeSet>
+
+    <changeSet id="39" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="fk_tasks_relationships_tasks2"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relationships
+            rename constraint fk_tasks_relationships_tasks2 to fk_tasks_relationships_subject_task
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

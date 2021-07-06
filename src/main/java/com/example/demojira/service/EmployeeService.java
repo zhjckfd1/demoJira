@@ -1,7 +1,8 @@
 package com.example.demojira.service;
 
-import com.example.demojira.DTO.EmployeeRegistrateDto;
-import com.example.demojira.DTO.EmployeeGetDto;
+import com.example.demojira.dto.EmployeeRegistrateDto;
+import com.example.demojira.dto.EmployeeGetDto;
+import com.example.demojira.dto.EmployeeUpdateDto;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface EmployeeService {
     EmployeeGetDto getById(Integer employeeId);
 
     //update?
-    Boolean editEmployee(Integer employeeId, EmployeeRegistrateDto employeeDto);
+    void editEmployee(Integer employeeId, EmployeeUpdateDto employeeDto);
 
     void changeActive(Integer employeeId);
 

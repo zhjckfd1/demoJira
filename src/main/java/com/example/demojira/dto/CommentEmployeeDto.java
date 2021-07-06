@@ -1,14 +1,13 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
-import com.example.demojira.model.Comment;
-import com.example.demojira.model.Employee;
+import com.example.demojira.model.Task;
 
 import java.util.Date;
 
-public class CommentTaskDto {
+public class CommentEmployeeDto {
     String text;
     Date createdDate;
-    Employee employee;
+    Integer taskId;
 
     public String getText() {
         return text;
@@ -26,11 +25,11 @@ public class CommentTaskDto {
         this.createdDate = createdDate;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Integer getTaskId() {
+        return taskId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 }

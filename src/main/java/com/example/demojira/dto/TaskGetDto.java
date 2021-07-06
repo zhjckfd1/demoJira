@@ -1,32 +1,31 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
 import com.example.demojira.model.Employee;
 import com.example.demojira.model.TaskStatus;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class TaskGetDto {
-    TaskStatus status;
-    Employee employee;
+    Integer taskStatusId;
+    Integer employeeId;
     String title;
     String description;
     Date registeredDate;
 
-    public TaskStatus getStatus() {
-        return status;
+    public Integer getTaskStatusId() {
+        return taskStatusId;
     }
 
-    public void setStatus(TaskStatus status) {
-        this.status = status;
+    public void setTaskStatusId(Integer taskStatusId) {
+        this.taskStatusId = taskStatusId;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Integer getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getTitle() {

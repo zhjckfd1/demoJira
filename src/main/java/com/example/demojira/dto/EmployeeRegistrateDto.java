@@ -1,4 +1,4 @@
-package com.example.demojira.DTO;
+package com.example.demojira.dto;
 
 public class EmployeeRegistrateDto {
     String login;
