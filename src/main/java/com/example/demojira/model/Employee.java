@@ -27,6 +27,17 @@ public class Employee {
     @Column(name = "login")
     private String login;
 
+
+    //Integer hc = entity.getEmployee().getPassword().hashCode();
+    /* //При добавлении преобразуем и заносим. При проверке преобразуем и сравниваем?
+    // нужна проверка => стандарный сетер и метод для создания пароля?
+    //(пользователь вводит строку, ее хешкод сравнивается с значением в БД?)
+    public int createPassword() {     //(в setPassword(string password) вызываем getLogin()?)
+        return password.hashCode() + login.hashCode();
+        md5
+    }
+    */
+    //соль и многократная прогонка?
     //@Schema(description = "пароль", example = "password")
     @Column(name = "password")
     private String password;

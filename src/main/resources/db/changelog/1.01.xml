@@ -69,4 +69,17 @@
         </sql>
     </changeSet>
 
+    <changeSet id="40" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_relationships" columnName="source_task_id"/>
+            <columnExists tableName="tasks_relationships" columnName="subject_task_id"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relationships
+            ADD CONSTRAINT c_tasks_relationships_tasks UNIQUE (source_task_id, subject_task_id)
+        </sql>
+    </changeSet>
+
+
+
 </databaseChangeLog>
