@@ -1,6 +1,7 @@
 package com.example.demojira.service;
 
 import com.example.demojira.dto.*;
+import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.model.*;
 import com.example.demojira.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,14 @@ public class TaskServiceImpl implements TaskService{
         TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipDto.getRelationId()).orElseThrow(EntityNotFoundException::new);
 
         TasksRelationship tasksRelationship = MappingUtils.mapToEntityFromTaskRelationshipDto(sourceTack, subjectTack, type);
-        tasksRelationshipRepository.save(tasksRelationship);
+
+        if (tasksRelationshipRepository.findDistinctBySourceTaskAndSubjectTask(tasksRelationship.getSourceTask(), tasksRelationship.getSubjectTask()) == null) {
+            tasksRelationshipRepository.save(tasksRelationship);
+        } else {
+            throw new EntityAlreadyExistsException();
+        }
+
+        //tasksRelationshipRepository.save(tasksRelationship);
     }
 
 

@@ -20,7 +20,6 @@ public class TasksRelationship {
     @JoinColumn(name = "source_task_id")
     private Task sourceTask;
 
-
     @ManyToOne
     @JoinColumn(name = "subject_task_id")
     private Task subjectTask;

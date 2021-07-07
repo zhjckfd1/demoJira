@@ -7,4 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
+    Employee findByLogin(String login);
 }

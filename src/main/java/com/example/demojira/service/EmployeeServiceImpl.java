@@ -3,17 +3,19 @@ package com.example.demojira.service;
 import com.example.demojira.dto.EmployeeGetDto;
 import com.example.demojira.dto.EmployeeRegistrateDto;
 import com.example.demojira.dto.EmployeeUpdateDto;
+import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
     //@Inject
     @Autowired
@@ -23,7 +25,12 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public void registrateEmployee(EmployeeRegistrateDto e) {
         Employee employee = MappingUtils.mapToEntityFromEmployeeRegistrateDto(e);
-        employeeRepository.save(employee);
+
+        if (employeeRepository.findByLogin(employee.getLogin()) == null) {
+            employeeRepository.save(employee);
+        } else {
+            throw new EntityAlreadyExistsException();
+        }
     }
 
     @Override
