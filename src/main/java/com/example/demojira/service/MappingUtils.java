@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Service
 public class MappingUtils {
+    //не маппинг
     public static CommentDto mapToCommentDto(Comment entity){
         CommentDto commentDto = new CommentDto();
         commentDto.setTaskId(entity.getTask().getId());
@@ -82,10 +83,11 @@ public class MappingUtils {
         return comment;
     }
 
-    public static Employee mapToEntityFromEmployeeRegistrateDto (EmployeeRegistrateDto employeeRegistrateDto){
+    public static Employee mapToEntityFromEmployeeRegistrateDto (EmployeeRegistrateDto employeeRegistrateDto, String password){
         Employee employee = new Employee();
         employee.setLogin(employeeRegistrateDto.getLogin());
-        employee.setPassword(employeeRegistrateDto.getPassword());
+        employee.setPassword(password);
+        //employee.setPassword(employeeRegistrateDto.getPassword());
         employee.setRegisteredDate(new Date());
         employee.setActive(true);
         return employee;

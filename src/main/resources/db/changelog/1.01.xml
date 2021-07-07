@@ -80,4 +80,16 @@
         </sql>
     </changeSet>
 
+
+
+    <changeSet id="41" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="employees" columnName="PASSWORD"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            MODIFY PASSWORD varchar2(32 char)
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
