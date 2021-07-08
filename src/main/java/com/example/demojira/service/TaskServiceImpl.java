@@ -31,14 +31,21 @@ public class TaskServiceImpl implements TaskService{
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private static final String START_STATUS = "BASE";
+
     @Override
     public void addTask(TaskRegistrateDto trd) {
         //как статус назначаем?
-        TaskStatus ts = taskStatusRepository.findById(1).orElseThrow(EntityNotFoundException::new);
         Employee employee = employeeRepository.findById(trd.getEmployeeId()).orElseThrow(EntityNotFoundException::new);
+        TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
+        //TaskStatus ts = taskStatusRepository.findById(1).orElseThrow(EntityNotFoundException::new);
 
-        Task task = MappingUtils.mapToEntityFromTaskRegistrateDto(trd, ts, employee);
-        taskRepository.save(task);
+        if (ts != null) {
+            Task task = MappingUtils.mapToEntityFromTaskRegistrateDto(trd, ts, employee);
+            taskRepository.save(task);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     //удлиняем ссылку в контроллере для включения закомментированного функционала?

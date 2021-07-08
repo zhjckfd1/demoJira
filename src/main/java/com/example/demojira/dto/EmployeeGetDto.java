@@ -1,14 +1,18 @@
 package com.example.demojira.dto;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.Date;
 
+@JsonPropertyOrder({ "firstname", "surname", "patronymic",  "login", "registeredDate", "active" })
 public class EmployeeGetDto {
     private String login;
     private Date registeredDate;
     private Boolean active;
     private String firstname;
     private String surname;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String patronymic;
 
     public String getLogin() {

@@ -22,6 +22,9 @@ public class TaskStatus {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "code")
+    private String code;
+
     @OneToMany(mappedBy = "status")
     private List<Task> tasks;
 
@@ -39,6 +42,14 @@ public class TaskStatus {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public List<Task> getTasks() {

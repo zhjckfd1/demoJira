@@ -81,7 +81,6 @@
     </changeSet>
 
 
-
     <changeSet id="41" author="Sonin">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="employees" columnName="PASSWORD"/>
@@ -148,6 +147,77 @@
         <sql>
             alter table employees
             MODIFY firstname varchar2(25 char) not null
+        </sql>
+    </changeSet>
+
+    <changeSet id="47" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks_statuses" columnName="code"/>
+            </not>
+            <tableExists tableName="tasks_statuses"/>
+        </preConditions>
+        <sql>
+            alter table tasks_statuses
+            ADD code varchar2(50 char)
+        </sql>
+    </changeSet>
+
+    <changeSet id="48" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_statuses
+            (status_id, status, code)
+            VALUES
+            (1, 'Назначена', 'BASE');
+        </sql>
+    </changeSet>
+
+    <changeSet id="49" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_statuses
+            (status_id, status, code)
+            VALUES
+            (2, 'Выполнена', 'ITOG');
+        </sql>
+    </changeSet>
+
+    <changeSet id="50" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_relations_types"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_relations_types
+            (relation_id, relation_type)
+            VALUES
+            (1, 'порождает');
+        </sql>
+    </changeSet>
+
+    <changeSet id="51" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_relations_types"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_relations_types
+            (relation_id, relation_type)
+            VALUES
+            (2, 'блокирует');
         </sql>
     </changeSet>
 
