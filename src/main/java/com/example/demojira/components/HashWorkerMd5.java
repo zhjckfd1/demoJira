@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HashWorkerMd5 {
-    private String salt;  // = "42";
+    private String salt;
 
     public HashWorkerMd5(){
         this.salt = "42";
@@ -19,7 +19,6 @@ public class HashWorkerMd5 {
         this.salt = salt;
     }
 
-    //bean через параметры метода
     public String md5Apache(String st) {
         return DigestUtils.md5Hex(salt + st);
     }

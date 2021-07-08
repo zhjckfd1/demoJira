@@ -1,13 +1,8 @@
 package com.example.demojira.model;
 
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import javax.persistence.*;
 
 @Entity
-//@Hidden
-//@Schema(description = "Сущность связанных задач")
 @Table(name = "tasks_relationships")
 public class TasksRelationship {
     @Id

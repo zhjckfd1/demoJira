@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Service
 public class MappingUtils {
-    //не маппинг
+    //не маппинг?
     public static CommentDto mapToCommentDto(Comment entity){
         CommentDto commentDto = new CommentDto();
         commentDto.setTaskId(entity.getTask().getId());
@@ -16,15 +16,6 @@ public class MappingUtils {
         commentDto.setText(entity.getText());
         commentDto.setCreatedDate(entity.getCreatedDate());
         return commentDto;
-    }
-
-    //?
-    public static CommentAddDto mapToCommentAddDto (Comment entity){
-        CommentAddDto commentAddDto = new CommentAddDto();
-        commentAddDto.setText(entity.getText());
-        commentAddDto.setTaskId(entity.getTask().getId());
-        commentAddDto.setEmployeeId(entity.getEmployee().getId());
-        return commentAddDto;
     }
 
     public static CommentEmployeeDto mapToCommentEmployeeDto (Comment entity){
@@ -54,15 +45,6 @@ public class MappingUtils {
         return employeeDto;
     }
 
-    public static EmployeeUpdateDto mapToEmployeeUpdateDto (Employee entity){
-        EmployeeUpdateDto employeeUpdateDto = new EmployeeUpdateDto();
-        employeeUpdateDto.setFirstname(entity.getFirstname());
-        employeeUpdateDto.setSurname(entity.getSurname());
-        employeeUpdateDto.setPatronymic(entity.getPatronymic());
-        employeeUpdateDto.setPassword(entity.getPassword());
-        return employeeUpdateDto;
-    }
-
     public static TaskGetDto mapToTaskGetDto(Task entity){
         TaskGetDto taskGetDto = new TaskGetDto();
         taskGetDto.setDescription(entity.getDescription());
@@ -81,13 +63,9 @@ public class MappingUtils {
         return taskRelationshipDto;
     }
 
-
     //из dto в entity
-    //или инициируем репозиторий, или передаем данные из него (полученную по id задачу...)
     public static Comment mapToEntityFromCommentAddDto (CommentAddDto commentAddDto, Task task, Employee employee){
         Comment comment = new Comment();
-        //comment.setTask(commentAddDto.getTask());
-        //comment.setEmployee(commentAddDto.getEmployee());
         comment.setTask(task);
         comment.setEmployee(employee);
         comment.setText(commentAddDto.getText());
@@ -102,7 +80,6 @@ public class MappingUtils {
         employee.setFirstname(employeeRegistrateDto.getFirstname());
         employee.setSurname(employeeRegistrateDto.getSurname());
         employee.setPatronymic(employeeRegistrateDto.getPatronymic());
-        //employee.setPassword(employeeRegistrateDto.getPassword());
         employee.setRegisteredDate(new Date());
         employee.setActive(true);
         return employee;
@@ -111,7 +88,6 @@ public class MappingUtils {
     public static Task mapToEntityFromTaskRegistrateDto (TaskRegistrateDto taskRegistrateDto, TaskStatus ts, Employee e){
         Task task = new Task();
         task.setStatus(ts);
-        //task.setEmployee(taskRegistrateDto.getEmployee());
         task.setEmployee(e);
         task.setTitle(taskRegistrateDto.getTitle());
         task.setDescription(taskRegistrateDto.getDescription());
@@ -119,12 +95,8 @@ public class MappingUtils {
         return task;
     }
 
-    //или инициируем репозиторий, или передаем данные из него (полученную по id задачу...)
     public static TasksRelationship mapToEntityFromTaskRelationshipDto (Task sourceTask, Task subjectTask, TasksRelationsType type){
-        //System.out.println(sourceTask + " + " + subjectTask + " + " + type);
         TasksRelationship tasksRelationship = new TasksRelationship();
-        //System.out.println(sourceTask + " + " + subjectTask + " + " + type);
-
         tasksRelationship.setSourceTask(sourceTask);
         tasksRelationship.setSubjectTask(subjectTask);
         tasksRelationship.setTasksRelationsType(type);

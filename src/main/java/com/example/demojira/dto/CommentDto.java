@@ -1,13 +1,7 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.Task;
-
 import java.util.Date;
 
-//lombok ?
-
-//нужны все поля, ничего не добавляем/убираем?
 public class CommentDto {
     private Integer taskId;
     private Integer employeeId;

@@ -12,34 +12,36 @@ import com.example.demojira.repository.EmployeeRepository;
 import com.example.demojira.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
-    //@Inject
     @Autowired
     private CommentRepository commentRepository;
+
     @Autowired
     private TaskRepository taskRepository;
+
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
     @Override
     public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
-        return commentRepository.getAllCommentsOnTheTask(taskId).stream().map(MappingUtils::mapToCommentTaskDto).collect(Collectors.toList());
+        return commentRepository.getAllByTaskIdOrderByCreatedDate(taskId).stream().map(MappingUtils::mapToCommentTaskDto).collect(Collectors.toList());
     }
 
     @Override
     public List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId) {
-        return commentRepository.getAllCommentsOnTheEmployee(employeeId).stream().map(MappingUtils::mapToCommentEmployeeDto).collect(Collectors.toList());
+        return commentRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId).stream().map(MappingUtils::mapToCommentEmployeeDto).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public void addComment(CommentAddDto commentAddDto) {
         Task task = taskRepository.findById(commentAddDto.getTaskId()).orElseThrow(EntityNotFoundException::new);
         Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId()).orElseThrow(EntityNotFoundException::new);

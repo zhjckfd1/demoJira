@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -21,20 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    //@Inject
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
     private HashWorkerMd5 hw;
 
-    //@Transactional
     @Override
-    public void registrateEmployee(EmployeeRegistrateDto e) {
-        //HashWorkerMd5 hw = (HashWorkerMd5) context.getBean("getHashWorkerMd5");
-        //System.out.println(hw.md5Apache("42"));
-
-        //меняем сразу в DTO?
+    @Transactional
+    public void registrateEmployee(EmployeeRegistrateDto e) throws EntityAlreadyExistsException {
         Employee employee = MappingUtils.mapToEntityFromEmployeeRegistrateDto(e, hw.md5Apache(e.getPassword()));
         if (employeeRepository.findByLogin(employee.getLogin()) == null) {
             employeeRepository.save(employee);
@@ -53,10 +49,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return MappingUtils.mapToEmployeeGetDto(employeeRepository.getById(employeeId));
     }
 
-
-    //как правильно?
-    //@Transactional
     @Override
+    @Transactional
     public void editEmployee(Integer employeeId, EmployeeUpdateDto employeeDto) {
         employeeRepository.findById(employeeId).ifPresentOrElse(employee -> {
             if (employeeDto.getFirstname() != null) {
@@ -77,9 +71,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         });
     }
 
-
-    //@Transactional
     @Override
+    @Transactional
     public void changeActive(Integer employeeId) {
         Employee e = employeeRepository.getById(employeeId);
         e.setActive(!e.getActive());

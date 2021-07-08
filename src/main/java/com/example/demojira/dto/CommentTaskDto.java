@@ -1,7 +1,5 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Employee;
-
 import java.util.Date;
 
 public class CommentTaskDto {

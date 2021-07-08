@@ -1,8 +1,5 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Task;
-import com.example.demojira.model.TasksRelationsType;
-
 public class TaskRelationshipDto {
     private Integer sourceTaskId;
     private Integer subjectTaskId;

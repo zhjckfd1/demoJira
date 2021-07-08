@@ -18,9 +18,4 @@ public interface CommentService {
     List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId);
 
     CommentDto getById(Integer commentId);
-
-
-    //update?    (не комментируем)
-    //Boolean editComment(Comment comment);
-
 }

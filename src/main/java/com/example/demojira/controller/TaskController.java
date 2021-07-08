@@ -2,6 +2,8 @@ package com.example.demojira.controller;
 
 
 import com.example.demojira.dto.*;
+import com.example.demojira.exceptions.EntityAlreadyExistsException;
+import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,7 +26,6 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
     @Operation(
             summary = "Создание задачи",
             description = "Позволяет создать задачу"
@@ -34,7 +35,6 @@ public class TaskController {
         taskService.addTask(task);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
     @Operation(
             summary = "Получение списка задач",
@@ -63,7 +63,6 @@ public class TaskController {
     @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.PATCH)
     public ResponseEntity<?> changeStatus(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
                                           @RequestBody TaskUpdateDto task) {
-        //возвращаем boolean (false - NOT_MODIFIED)  (если что-то поменяли - вернем true)   ???
         taskService.patchTask(taskId, task);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ public class TaskController {
             description = "Позволяет связать 2 задачи"
     )
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.POST)
-    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) {
+    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) throws EntityAlreadyExistsException, TryingToCreateABondOnYourselfException {
         taskService.createRelationship(taskRelationshipDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -107,5 +106,15 @@ public class TaskController {
     public ResponseEntity<TaskRelationshipDto> readTasksRelationship(@PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
         final TaskRelationshipDto task = taskService.getRelationshipById(id);
         return new ResponseEntity<>(task, HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Удаление связи между задачами",
+            description = "Позволяет удалить связь между задачами по ее id"
+    )
+    @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<TaskRelationshipDto> deleteTasksRelationship(@PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
+        taskService.deleteRelationshipById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,7 +1,5 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Employee;
-
 public class TaskRegistrateDto {
     private Integer employeeId;
     private String title;

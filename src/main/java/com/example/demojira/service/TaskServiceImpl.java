@@ -2,20 +2,20 @@ package com.example.demojira.service;
 
 import com.example.demojira.dto.*;
 import com.example.demojira.exceptions.EntityAlreadyExistsException;
+import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.model.*;
 import com.example.demojira.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
-    //@Inject
     @Autowired
     private TaskRepository taskRepository;
 
@@ -34,11 +34,10 @@ public class TaskServiceImpl implements TaskService{
     private static final String START_STATUS = "BASE";
 
     @Override
+    @Transactional
     public void addTask(TaskRegistrateDto trd) {
-        //как статус назначаем?
         Employee employee = employeeRepository.findById(trd.getEmployeeId()).orElseThrow(EntityNotFoundException::new);
         TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
-        //TaskStatus ts = taskStatusRepository.findById(1).orElseThrow(EntityNotFoundException::new);
 
         if (ts != null) {
             Task task = MappingUtils.mapToEntityFromTaskRegistrateDto(trd, ts, employee);
@@ -48,21 +47,9 @@ public class TaskServiceImpl implements TaskService{
         }
     }
 
-    //удлиняем ссылку в контроллере для включения закомментированного функционала?
-    /*
     @Override
-    public List<Task> getAllTasksOnEmployee(Integer employeeId) {
-        return taskRepository.getAllTasksOnEmployee(employeeId);
-    }
-
-    @Override
-    public List<Task> getAllEmployeeTasksWithStatus(Integer employeeId, Integer statusId) {
-        return taskRepository.getAllEmployeeTasksWithStatus(employeeId, statusId);
-    }*/
-
-    @Override
+    @Transactional
     public void patchTask(Integer taskId, TaskUpdateDto taskUpdateDto) {
-        //обнуление необязательных полей?
         taskRepository.findById(taskId).ifPresentOrElse(task -> {
             if (taskUpdateDto.getDescription() != null) {
                 task.setDescription(taskUpdateDto.getDescription());
@@ -87,7 +74,6 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public TaskGetDto getById(Integer taskId) {
         return MappingUtils.mapToTaskGetDto(taskRepository.getById(taskId));
-        //return taskRepository.getById(taskId);
     }
 
     @Override
@@ -95,12 +81,19 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.findAll().stream().map(MappingUtils::mapToTaskGetDto).collect(Collectors.toList());
     }
 
-    //в отдельный сервис/контроллер?
     @Override
-    public void createRelationship(TaskRelationshipDto taskRelationshipDto) {
-        Task sourceTack = taskRepository.findById(taskRelationshipDto.getSourceTaskId()).orElseThrow(EntityNotFoundException::new);
-        Task subjectTack = taskRepository.findById(taskRelationshipDto.getSubjectTaskId()).orElseThrow(EntityNotFoundException::new);
-        TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipDto.getRelationId()).orElseThrow(EntityNotFoundException::new);
+    @Transactional
+    public void createRelationship(TaskRelationshipDto taskRelationshipDto) throws EntityAlreadyExistsException, TryingToCreateABondOnYourselfException {
+        if (taskRelationshipDto.getSourceTaskId().equals(taskRelationshipDto.getSubjectTaskId())) {
+            throw new TryingToCreateABondOnYourselfException();
+        }
+
+        Task sourceTack = taskRepository.findById(taskRelationshipDto.getSourceTaskId())
+                .orElseThrow(EntityNotFoundException::new);
+        Task subjectTack = taskRepository.findById(taskRelationshipDto.getSubjectTaskId())
+                .orElseThrow(EntityNotFoundException::new);
+        TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipDto.getRelationId())
+                .orElseThrow(EntityNotFoundException::new);
 
         TasksRelationship tasksRelationship = MappingUtils.mapToEntityFromTaskRelationshipDto(sourceTack, subjectTack, type);
 
@@ -109,18 +102,14 @@ public class TaskServiceImpl implements TaskService{
         } else {
             throw new EntityAlreadyExistsException();
         }
-
-        //tasksRelationshipRepository.save(tasksRelationship);
     }
 
-
     @Override
+    @Transactional
     public void updateRelationship(Integer relationshipId, TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
-        tasksRelationshipRepository.findById(relationshipId).ifPresentOrElse(relationship ->{
+        tasksRelationshipRepository.findById(relationshipId).ifPresentOrElse(relationship -> {
             TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipUpdateDto.getRelationId()).orElseThrow(EntityNotFoundException::new);
-            //System.out.println(type.getRelationType());
             relationship.setTasksRelationsType(type);
-            //relationship.setTasksRelationsType(tasksRelationsTypeRepository.getById(taskRelationshipUpdateDto.getRelationId()));
             tasksRelationshipRepository.save(relationship);
         }, () -> {
             throw new EntityNotFoundException();
@@ -133,7 +122,15 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public TaskRelationshipDto getRelationshipById(Integer taskRelationshipId){
+    public TaskRelationshipDto getRelationshipById(Integer taskRelationshipId) {
         return MappingUtils.mapToTaskRelationshipDto(tasksRelationshipRepository.getById(taskRelationshipId));
+    }
+
+    @Override
+    @Transactional
+    public void deleteRelationshipById(Integer tasksRelationshipId) {
+        tasksRelationshipRepository.findById(tasksRelationshipId).ifPresentOrElse(relationship -> tasksRelationshipRepository.delete(relationship), () -> {
+            throw new EntityNotFoundException();
+        });
     }
 }

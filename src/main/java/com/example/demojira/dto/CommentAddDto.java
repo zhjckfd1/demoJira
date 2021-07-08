@@ -1,7 +1,5 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.Task;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public class CommentAddDto {

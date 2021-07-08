@@ -221,4 +221,17 @@
         </sql>
     </changeSet>
 
+    <changeSet id="52" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_relationships"/>
+            <columnExists tableName="tasks_relationships" columnName="source_task_id"/>
+            <columnExists tableName="tasks_relationships" columnName="subject_task_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_relationships
+            ADD CONSTRAINT check_tasks_discrepancy
+            CHECK (source_task_id != subject_task_id);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

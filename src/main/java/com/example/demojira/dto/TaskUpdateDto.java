@@ -1,10 +1,5 @@
 package com.example.demojira.dto;
 
-import com.example.demojira.model.Employee;
-import com.example.demojira.model.TaskStatus;
-
-import java.util.Date;
-
 public class TaskUpdateDto {
     private Integer taskStatusId;
     private Integer employeeId;

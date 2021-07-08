@@ -17,29 +17,23 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-//@RequestMapping(value = "/comments")
-//@RequestMapping("/comments")                  //в начале указываем?
 @Tag(name="Комментарий", description="работает с комментариями сотрудников")
 public class CommentController {
 
     private final CommentService commentService;
-    //на примере @RequestMapping(value = "/comments",  method = RequestMethod.GET)
 
     @Autowired
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
-    //dto?
     @Operation(
             summary = "Создание комментария",
             description = "Позволяет создать комментарий"
     )
-    //@PostMapping(value = "/comments")
     @RequestMapping(value = "/comments",  method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody CommentAddDto commentAddDto) {
         commentService.addComment(commentAddDto);
-        //return ResponseEntity.ok().body(HttpStatus.CREATED);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -50,7 +44,6 @@ public class CommentController {
     @RequestMapping(value = "/comments",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentDto>> read() {
         final List<CommentDto> comments = commentService.getAll();
-        //return comments != null && !comments.isEmpty()
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
@@ -61,14 +54,8 @@ public class CommentController {
     @RequestMapping(value = "/comments/tasks/{taskId}",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentTaskDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
         final List<CommentTaskDto> comments = commentService.getAllCommentsOnTheTask(taskId);
-        //return comments != null && !comments.isEmpty()
         return new ResponseEntity<>(comments, HttpStatus.OK);
-        /*
-        return !comments.isEmpty()
-                ? new ResponseEntity<>(comments, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);*/
     }
-
 
     @Operation(
             summary = "Получение списка комментариев пользователя",
@@ -78,12 +65,7 @@ public class CommentController {
     public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
         final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
-        /*
-        return !comments.isEmpty()
-                ? new ResponseEntity<>(comments, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);*/
     }
-
 
     @Operation(
             summary = "Получение комментария",

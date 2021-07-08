@@ -3,6 +3,7 @@ package com.example.demojira.controller;
 import com.example.demojira.dto.EmployeeGetDto;
 import com.example.demojira.dto.EmployeeRegistrateDto;
 import com.example.demojira.dto.EmployeeUpdateDto;
+import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,19 +27,15 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-
-    //@PostMapping(value = "/employees")
-    //@ResponseBody
     @Operation(
             summary = "Регистрация сотрудника",
             description = "Позволяет зарегистрировать сотрудника"
     )
     @RequestMapping(value = "/employees",  method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody EmployeeRegistrateDto employee) {
+    public ResponseEntity<?> create(@RequestBody EmployeeRegistrateDto employee) throws EntityAlreadyExistsException {
         employeeService.registrateEmployee(employee);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
     @Operation(
             summary = "Получение списка сотрудников",
@@ -60,8 +57,6 @@ public class EmployeeController {
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
-
-    //как правильно?
     @Operation(
             summary = "Редактирование сотрудника",
             description = "Позволяет изменить данные сотрудника"
@@ -77,13 +72,9 @@ public class EmployeeController {
             description = "Меняет статус сотрудника на противоположный"
     )
 
-    //@Hidden
-    ///employees/{id}/changeStatus
     @RequestMapping(value = "/employees/{id}/changeActive",  method = RequestMethod.PATCH)
     public ResponseEntity<?> changeStatus(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
         employeeService.changeActive(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 }
