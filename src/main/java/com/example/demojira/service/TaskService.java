@@ -16,7 +16,7 @@ public interface TaskService {
 
     List<TaskGetDto> getAllTasks();
 
-    void createRelationship(TaskRelationshipDto taskRelationshipDto) throws EntityAlreadyExistsException, TryingToCreateABondOnYourselfException;
+    void createRelationship(TaskRelationshipDto taskRelationshipDto);
 
     void updateRelationship(Integer relationshipId, TaskRelationshipUpdateDto taskRelationshipUpdateDto);
 

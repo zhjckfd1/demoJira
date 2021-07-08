@@ -32,7 +32,7 @@ public class EmployeeController {
             description = "Позволяет зарегистрировать сотрудника"
     )
     @RequestMapping(value = "/employees",  method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody EmployeeRegistrateDto employee) throws EntityAlreadyExistsException {
+    public ResponseEntity<?> create(@RequestBody EmployeeRegistrateDto employee) {
         employeeService.registrateEmployee(employee);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

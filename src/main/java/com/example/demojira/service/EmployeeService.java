@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    void registrateEmployee(EmployeeRegistrateDto employeeRegistrateDto) throws EntityAlreadyExistsException;
+    void registrateEmployee(EmployeeRegistrateDto employeeRegistrateDto);
 
     List<EmployeeGetDto> getAll();
 

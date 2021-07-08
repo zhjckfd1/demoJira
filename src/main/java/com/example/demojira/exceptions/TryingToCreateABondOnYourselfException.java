@@ -1,4 +1,7 @@
 package com.example.demojira.exceptions;
 
-public class TryingToCreateABondOnYourselfException extends Exception {
+import javax.persistence.PersistenceException;
+
+//PersistenceException
+public class TryingToCreateABondOnYourselfException extends RuntimeException {
 }

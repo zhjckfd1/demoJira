@@ -72,7 +72,7 @@ public class TaskController {
             description = "Позволяет связать 2 задачи"
     )
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.POST)
-    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) throws EntityAlreadyExistsException, TryingToCreateABondOnYourselfException {
+    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) {
         taskService.createRelationship(taskRelationshipDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

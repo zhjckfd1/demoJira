@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void createRelationship(TaskRelationshipDto taskRelationshipDto) throws EntityAlreadyExistsException, TryingToCreateABondOnYourselfException {
+    public void createRelationship(TaskRelationshipDto taskRelationshipDto) {
         if (taskRelationshipDto.getSourceTaskId().equals(taskRelationshipDto.getSubjectTaskId())) {
             throw new TryingToCreateABondOnYourselfException();
         }

@@ -30,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void registrateEmployee(EmployeeRegistrateDto e) throws EntityAlreadyExistsException {
+    public void registrateEmployee(EmployeeRegistrateDto e) {
         Employee employee = MappingUtils.mapToEntityFromEmployeeRegistrateDto(e, hw.md5Apache(e.getPassword()));
         if (employeeRepository.findByLogin(employee.getLogin()) == null) {
             employeeRepository.save(employee);
