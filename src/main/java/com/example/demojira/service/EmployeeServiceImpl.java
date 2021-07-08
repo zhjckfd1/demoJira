@@ -59,7 +59,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void editEmployee(Integer employeeId, EmployeeUpdateDto employeeDto) {
         employeeRepository.findById(employeeId).ifPresentOrElse(employee -> {
-            employee.setPassword(hw.md5Apache(employeeDto.getPassword()));
+            if (employeeDto.getFirstname() != null) {
+                employee.setFirstname(employeeDto.getFirstname());
+            }
+            if (employeeDto.getSurname() != null) {
+                employee.setSurname(employeeDto.getSurname());
+            }
+            if (employeeDto.getPatronymic() != null) {
+                employee.setPatronymic(employeeDto.getPatronymic());
+            }
+            if (employeeDto.getPassword() != null) {
+                employee.setPassword(hw.md5Apache(employeeDto.getPassword()));
+            }
             employeeRepository.save(employee);
         }, () -> {
             throw new EntityNotFoundException();

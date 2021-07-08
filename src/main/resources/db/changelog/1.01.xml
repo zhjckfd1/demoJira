@@ -92,4 +92,63 @@
         </sql>
     </changeSet>
 
+    <changeSet id="42" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="employees" columnName="surname"/>
+            </not>
+            <tableExists tableName="employees"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            ADD surname varchar2(25 char)
+        </sql>
+    </changeSet>
+
+    <changeSet id="43" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="employees" columnName="firstname"/>
+            </not>
+            <tableExists tableName="employees"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            ADD firstname varchar2(25 char)
+        </sql>
+    </changeSet>
+
+    <changeSet id="44" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="employees" columnName="patronymic"/>
+            </not>
+            <tableExists tableName="employees"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            ADD patronymic varchar2(25 char)
+        </sql>
+    </changeSet>
+
+    <changeSet id="45" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="employees" columnName="surname"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            MODIFY surname varchar2(25 char) not null
+        </sql>
+    </changeSet>
+
+    <changeSet id="46" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="employees" columnName="firstname"/>
+        </preConditions>
+        <sql>
+            alter table employees
+            MODIFY firstname varchar2(25 char) not null
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

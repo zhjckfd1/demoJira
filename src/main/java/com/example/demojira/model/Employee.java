@@ -52,6 +52,15 @@ public class Employee {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
+
     //@JoinColumn(name="employee_id")
     //set?
     @OneToMany(mappedBy = "employee")
@@ -98,5 +107,29 @@ public class Employee {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 }

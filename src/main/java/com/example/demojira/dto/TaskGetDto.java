@@ -6,11 +6,11 @@ import com.example.demojira.model.TaskStatus;
 import java.util.Date;
 
 public class TaskGetDto {
-    Integer taskStatusId;
-    Integer employeeId;
-    String title;
-    String description;
-    Date registeredDate;
+    private Integer taskStatusId;
+    private Integer employeeId;
+    private String title;
+    private String description;
+    private Date registeredDate;
 
     public Integer getTaskStatusId() {
         return taskStatusId;

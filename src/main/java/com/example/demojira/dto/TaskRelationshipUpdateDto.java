@@ -1,7 +1,7 @@
 package com.example.demojira.dto;
 
 public class TaskRelationshipUpdateDto {
-    Integer relationId;
+    private Integer relationId;
 
     public Integer getRelationId() {
         return relationId;

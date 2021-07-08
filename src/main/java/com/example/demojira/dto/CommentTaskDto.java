@@ -5,9 +5,9 @@ import com.example.demojira.model.Employee;
 import java.util.Date;
 
 public class CommentTaskDto {
-    String text;
-    Date createdDate;
-    Integer employeeId;
+    private String text;
+    private Date createdDate;
+    private Integer employeeId;
 
     public String getText() {
         return text;

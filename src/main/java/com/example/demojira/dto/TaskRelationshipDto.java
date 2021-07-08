@@ -4,9 +4,9 @@ import com.example.demojira.model.Task;
 import com.example.demojira.model.TasksRelationsType;
 
 public class TaskRelationshipDto {
-    Integer sourceTaskId;
-    Integer subjectTaskId;
-    Integer relationId;
+    private Integer sourceTaskId;
+    private Integer subjectTaskId;
+    private Integer relationId;
 
     public Integer getSourceTaskId() {
         return sourceTaskId;

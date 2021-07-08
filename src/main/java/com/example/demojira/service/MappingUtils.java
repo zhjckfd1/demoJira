@@ -48,7 +48,19 @@ public class MappingUtils {
         employeeDto.setLogin(entity.getLogin());
         employeeDto.setRegisteredDate(entity.getRegisteredDate());
         employeeDto.setActive(entity.getActive());
+        employeeDto.setFirstname(entity.getFirstname());
+        employeeDto.setSurname(entity.getSurname());
+        employeeDto.setPatronymic(entity.getPatronymic());
         return employeeDto;
+    }
+
+    public static EmployeeUpdateDto mapToEmployeeUpdateDto (Employee entity){
+        EmployeeUpdateDto employeeUpdateDto = new EmployeeUpdateDto();
+        employeeUpdateDto.setFirstname(entity.getFirstname());
+        employeeUpdateDto.setSurname(entity.getSurname());
+        employeeUpdateDto.setPatronymic(entity.getPatronymic());
+        employeeUpdateDto.setPassword(entity.getPassword());
+        return employeeUpdateDto;
     }
 
     public static TaskGetDto mapToTaskGetDto(Task entity){
@@ -87,6 +99,9 @@ public class MappingUtils {
         Employee employee = new Employee();
         employee.setLogin(employeeRegistrateDto.getLogin());
         employee.setPassword(password);
+        employee.setFirstname(employeeRegistrateDto.getFirstname());
+        employee.setSurname(employeeRegistrateDto.getSurname());
+        employee.setPatronymic(employeeRegistrateDto.getPatronymic());
         //employee.setPassword(employeeRegistrateDto.getPassword());
         employee.setRegisteredDate(new Date());
         employee.setActive(true);

@@ -31,7 +31,6 @@ public class TaskServiceImpl implements TaskService{
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
     @Override
     public void addTask(TaskRegistrateDto trd) {
         //как статус назначаем?
@@ -88,8 +87,6 @@ public class TaskServiceImpl implements TaskService{
     public List<TaskGetDto> getAllTasks() {
         return taskRepository.findAll().stream().map(MappingUtils::mapToTaskGetDto).collect(Collectors.toList());
     }
-
-
 
     //в отдельный сервис/контроллер?
     @Override

@@ -3,9 +3,9 @@ package com.example.demojira.dto;
 import com.example.demojira.model.Employee;
 
 public class TaskRegistrateDto {
-    Integer employeeId;
-    String title;
-    String description;
+    private Integer employeeId;
+    private String title;
+    private String description;
 
 
     public Integer getEmployeeId() {
