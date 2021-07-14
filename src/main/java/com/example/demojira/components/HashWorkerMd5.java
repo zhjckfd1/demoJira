@@ -3,7 +3,7 @@ package com.example.demojira.components;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component()
 public class HashWorkerMd5 {
     private String salt;
 

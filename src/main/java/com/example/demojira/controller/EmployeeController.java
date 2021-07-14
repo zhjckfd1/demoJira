@@ -3,7 +3,6 @@ package com.example.demojira.controller;
 import com.example.demojira.dto.EmployeeGetDto;
 import com.example.demojira.dto.EmployeeRegistrateDto;
 import com.example.demojira.dto.EmployeeUpdateDto;
-import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,7 +51,8 @@ public class EmployeeController {
             description = "Позволяет получить сотрудника по его id"
     )
     @RequestMapping(value = "/employees/{id}",  method = RequestMethod.GET)
-    public ResponseEntity<EmployeeGetDto> read(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
+    public ResponseEntity<EmployeeGetDto> read(
+            @PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
         final EmployeeGetDto employee = employeeService.getById(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
@@ -62,7 +62,9 @@ public class EmployeeController {
             description = "Позволяет изменить данные сотрудника"
     )
     @RequestMapping(value = "/employees/{id}",  method = RequestMethod.PUT)
-    public ResponseEntity<?> update(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id, @RequestBody EmployeeUpdateDto employee) {
+    public ResponseEntity<?> update(
+            @PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id,
+            @RequestBody EmployeeUpdateDto employee) {
         employeeService.editEmployee(id, employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,7 +75,8 @@ public class EmployeeController {
     )
 
     @RequestMapping(value = "/employees/{id}/changeActive",  method = RequestMethod.PATCH)
-    public ResponseEntity<?> changeStatus(@PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
+    public ResponseEntity<?> changeStatus(
+            @PathVariable(name = "id") @Parameter(description = "id сотрудника") @Min(1) Integer id) {
         employeeService.changeActive(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

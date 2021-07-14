@@ -1,8 +1,11 @@
 package com.example.demojira.exceptions;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.PersistenceException;
-
-//PersistenceException
+//@ResponseStatus(value= HttpStatus.BAD_REQUEST)
 public class EntityAlreadyExistsException extends RuntimeException {
+
+    /*
+     *public  EntityAlreadyExistsException(String message, Throwable cause) {
+     *    super(message, cause);
+     *}
+     */
 }

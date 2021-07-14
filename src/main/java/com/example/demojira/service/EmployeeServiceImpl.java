@@ -1,21 +1,17 @@
 package com.example.demojira.service;
 
 import com.example.demojira.components.HashWorkerMd5;
-//import com.example.demojira.config.TestConfig;
 import com.example.demojira.dto.EmployeeGetDto;
 import com.example.demojira.dto.EmployeeRegistrateDto;
 import com.example.demojira.dto.EmployeeUpdateDto;
 import com.example.demojira.exceptions.EntityAlreadyExistsException;
+import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,7 +37,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeGetDto> getAll() {
-        return employeeRepository.findAll().stream().map(MappingUtils::mapToEmployeeGetDto).collect(Collectors.toList());
+        return employeeRepository.findAll()
+                .stream()
+                .map(MappingUtils::mapToEmployeeGetDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -65,9 +64,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeDto.getPassword() != null) {
                 employee.setPassword(hw.md5Apache(employeeDto.getPassword()));
             }
-            employeeRepository.save(employee);
         }, () -> {
-            throw new EntityNotFoundException();
+            throw new MyEntityNotFoundException();
         });
     }
 
@@ -76,7 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void changeActive(Integer employeeId) {
         Employee e = employeeRepository.getById(employeeId);
         e.setActive(!e.getActive());
-        employeeRepository.save(e);
     }
 
 

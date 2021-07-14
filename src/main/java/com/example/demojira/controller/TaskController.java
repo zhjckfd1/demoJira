@@ -51,18 +51,21 @@ public class TaskController {
             description = "Позволяет получить задачу по ее id"
     )
     @RequestMapping(value = "/tasks/{id}", method = RequestMethod.GET)
-    public ResponseEntity<TaskGetDto> read(@PathVariable(name = "id") @Parameter(description = "id задачи") @Min(1) Integer id) {
+    public ResponseEntity<TaskGetDto> read(
+            @PathVariable(name = "id") @Parameter(description = "id задачи") @Min(1) Integer id) {
         final TaskGetDto task = taskService.getById(id);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
     @Operation(
             summary = "Обновление задачи",
-            description = "Позволяет изменить переменные задачи (статус задачи, назначенный сотрудник, название задачи, описание задачи)"
+            description = "Позволяет изменить переменные задачи "
     )
     @RequestMapping(value = "/tasks/{taskId}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> changeStatus(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
-                                          @RequestBody TaskUpdateDto task) {
+    //@ResponseStatus(HttpStatus.NO_CONTENT)    //вместо return
+    public ResponseEntity<?> changeTask(
+            @PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
+            @RequestBody TaskUpdateDto task) {
         taskService.patchTask(taskId, task);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -72,7 +75,8 @@ public class TaskController {
             description = "Позволяет связать 2 задачи"
     )
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.POST)
-    public ResponseEntity<?> createRelationBetweenTasks(@RequestBody TaskRelationshipDto taskRelationshipDto) {
+    public ResponseEntity<?> createRelationBetweenTasks(
+            @RequestBody TaskRelationshipDto taskRelationshipDto) {
         taskService.createRelationship(taskRelationshipDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -81,9 +85,11 @@ public class TaskController {
             summary = "Обновляет связь между задачами",
             description = "Позволяет обновить связь между задачами"
     )
+    //как правильно перенести?
     @RequestMapping(value = "/tasks/relations/{relationshipId}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> updateRelationBetweenTasks(@PathVariable(name = "relationshipId") @Parameter(description = "id связи между задачами") @Min(1) Integer relationshipId,
-                                                       @RequestBody TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
+    public ResponseEntity<?> updateRelationBetweenTasks(
+            @PathVariable(name = "relationshipId") @Parameter(description = "id связи между задачами") @Min(1) Integer relationshipId,
+            @RequestBody TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
         taskService.updateRelationship(relationshipId, taskRelationshipUpdateDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -103,7 +109,8 @@ public class TaskController {
             description = "Позволяет получить связь между задачами по ее id"
     )
     @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.GET)
-    public ResponseEntity<TaskRelationshipDto> readTasksRelationship(@PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
+    public ResponseEntity<TaskRelationshipDto> readTasksRelationship(
+            @PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
         final TaskRelationshipDto task = taskService.getRelationshipById(id);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
@@ -113,7 +120,8 @@ public class TaskController {
             description = "Позволяет удалить связь между задачами по ее id"
     )
     @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<TaskRelationshipDto> deleteTasksRelationship(@PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
+    public ResponseEntity<TaskRelationshipDto> deleteTasksRelationship(
+            @PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
         taskService.deleteRelationshipById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

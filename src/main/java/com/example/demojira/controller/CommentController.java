@@ -52,7 +52,8 @@ public class CommentController {
             description = "Позволяет получить все комментарии к задаче"
     )
     @RequestMapping(value = "/comments/tasks/{taskId}",  method = RequestMethod.GET)
-    public ResponseEntity<List<CommentTaskDto>> readTaskComments(@PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
+    public ResponseEntity<List<CommentTaskDto>> readTaskComments(
+            @PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
         final List<CommentTaskDto> comments = commentService.getAllCommentsOnTheTask(taskId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
@@ -62,7 +63,8 @@ public class CommentController {
             description = "Позволяет получить все комментарии пользователя"
     )
     @RequestMapping(value = "/comments/employees/{employeeId}",  method = RequestMethod.GET)
-    public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(@PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
+    public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(
+            @PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
         final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
@@ -72,7 +74,8 @@ public class CommentController {
             description = "Позволяет получить комментарий по его id"
     )
     @RequestMapping(value = "/comments/{id}",  method = RequestMethod.GET)
-    public ResponseEntity<CommentDto> read(@PathVariable(name = "id") @Parameter(description = "id комментария") @Min(1) Integer id) {
+    public ResponseEntity<CommentDto> read(
+            @PathVariable(name = "id") @Parameter(description = "id комментария") @Min(1) Integer id) {
         final CommentDto comment = commentService.getById(id);
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }

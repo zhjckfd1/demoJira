@@ -64,7 +64,8 @@ public class MappingUtils {
     }
 
     //из dto в entity
-    public static Comment mapToEntityFromCommentAddDto (CommentAddDto commentAddDto, Task task, Employee employee){
+    public static Comment mapToEntityFromCommentAddDto(CommentAddDto commentAddDto, Task task,
+                                                       Employee employee){
         Comment comment = new Comment();
         comment.setTask(task);
         comment.setEmployee(employee);
@@ -73,7 +74,8 @@ public class MappingUtils {
         return comment;
     }
 
-    public static Employee mapToEntityFromEmployeeRegistrateDto (EmployeeRegistrateDto employeeRegistrateDto, String password){
+    public static Employee mapToEntityFromEmployeeRegistrateDto(EmployeeRegistrateDto employeeRegistrateDto,
+                                                                String password){
         Employee employee = new Employee();
         employee.setLogin(employeeRegistrateDto.getLogin());
         employee.setPassword(password);
@@ -85,7 +87,8 @@ public class MappingUtils {
         return employee;
     }
 
-    public static Task mapToEntityFromTaskRegistrateDto (TaskRegistrateDto taskRegistrateDto, TaskStatus ts, Employee e){
+    public static Task mapToEntityFromTaskRegistrateDto
+            (TaskRegistrateDto taskRegistrateDto, TaskStatus ts, Employee e){
         Task task = new Task();
         task.setStatus(ts);
         task.setEmployee(e);
@@ -95,7 +98,8 @@ public class MappingUtils {
         return task;
     }
 
-    public static TasksRelationship mapToEntityFromTaskRelationshipDto (Task sourceTask, Task subjectTask, TasksRelationsType type){
+    public static TasksRelationship mapToEntityFromTaskRelationshipDto (Task sourceTask, Task subjectTask,
+                                                                        TasksRelationsType type){
         TasksRelationship tasksRelationship = new TasksRelationship();
         tasksRelationship.setSourceTask(sourceTask);
         tasksRelationship.setSubjectTask(subjectTask);

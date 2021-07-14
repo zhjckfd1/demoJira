@@ -25,6 +25,7 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
+    //@Temporal(TemporalType.DATE)
     @Column(name = "created_date")
     private Date createdDate;
 

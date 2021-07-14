@@ -4,6 +4,7 @@ import com.example.demojira.dto.CommentAddDto;
 import com.example.demojira.dto.CommentDto;
 import com.example.demojira.dto.CommentEmployeeDto;
 import com.example.demojira.dto.CommentTaskDto;
+import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.model.Comment;
 import com.example.demojira.model.Employee;
 import com.example.demojira.model.Task;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,19 +32,27 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
-        return commentRepository.getAllByTaskIdOrderByCreatedDate(taskId).stream().map(MappingUtils::mapToCommentTaskDto).collect(Collectors.toList());
+        return commentRepository.getAllByTaskIdOrderByCreatedDate(taskId)
+                .stream()
+                .map(MappingUtils::mapToCommentTaskDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId) {
-        return commentRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId).stream().map(MappingUtils::mapToCommentEmployeeDto).collect(Collectors.toList());
+        return commentRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId)
+                .stream()
+                .map(MappingUtils::mapToCommentEmployeeDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public void addComment(CommentAddDto commentAddDto) {
-        Task task = taskRepository.findById(commentAddDto.getTaskId()).orElseThrow(EntityNotFoundException::new);
-        Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId()).orElseThrow(EntityNotFoundException::new);
+        Task task = taskRepository.findById(commentAddDto.getTaskId())
+                .orElseThrow(MyEntityNotFoundException::new);
+        Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId())
+                .orElseThrow(MyEntityNotFoundException::new);
 
         Comment comment = MappingUtils.mapToEntityFromCommentAddDto(commentAddDto, task, employee);
         commentRepository.save(comment);
@@ -52,7 +60,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> getAll() {
-        return commentRepository.findAll().stream().map(MappingUtils::mapToCommentDto).collect(Collectors.toList());
+        return commentRepository.findAll()
+                .stream()
+                .map(MappingUtils::mapToCommentDto)
+                .collect(Collectors.toList());
     }
 
     @Override
