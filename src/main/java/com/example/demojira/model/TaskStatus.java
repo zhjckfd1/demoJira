@@ -16,9 +16,6 @@ public class TaskStatus {
     @Column(name = "code")
     private String code;
 
-    @OneToMany(mappedBy = "status")
-    private List<Task> tasks;
-
     public Integer getId() {
         return id;
     }
@@ -41,9 +38,5 @@ public class TaskStatus {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
     }
 }

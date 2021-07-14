@@ -6,6 +6,9 @@ import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.model.*;
 import com.example.demojira.repository.*;
+import com.example.demojira.service.mapping.MappingTaskGetDto;
+import com.example.demojira.service.mapping.MappingTaskRegistrateDto;
+import com.example.demojira.service.mapping.MappingTaskRelationshipDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +26,13 @@ public class TaskServiceImpl implements TaskService {
     private TaskStatusRepository taskStatusRepository;
 
     @Autowired
-    private TasksRelationshipRepository tasksRelationshipRepository;
-
-    @Autowired
-    private TasksRelationsTypeRepository tasksRelationsTypeRepository;
-
-    @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private MappingTaskGetDto mappingTaskGetDto;
+
+    @Autowired
+    private MappingTaskRegistrateDto mappingTaskRegistrateDto;
 
     private static final String START_STATUS = "BASE";
 
@@ -41,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
         TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
 
         if (ts != null) {
-            Task task = MappingUtils.mapToEntityFromTaskRegistrateDto(trd, ts, employee);
+            Task task = mappingTaskRegistrateDto.mapToEntity(trd, ts, employee);
             taskRepository.save(task);
         } else {
             throw new MyEntityNotFoundException();
@@ -75,75 +78,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskGetDto getById(Integer taskId) {
-        return MappingUtils.mapToTaskGetDto(taskRepository.getById(taskId));
+        return mappingTaskGetDto.mapToDto(taskRepository.getById(taskId));
     }
 
     @Override
     public List<TaskGetDto> getAllTasks() {
         return taskRepository.findAll()
                 .stream()
-                .map(MappingUtils::mapToTaskGetDto)
+                .map(mappingTaskGetDto::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public void createRelationship(TaskRelationshipDto taskRelationshipDto) {
-        if (taskRelationshipDto.getSourceTaskId().equals(taskRelationshipDto.getSubjectTaskId())) {
-            throw new TryingToCreateABondOnYourselfException();
-        }
 
-        Task sourceTack = taskRepository.findById(taskRelationshipDto.getSourceTaskId())
-                .orElseThrow(MyEntityNotFoundException::new);
-        Task subjectTack = taskRepository.findById(taskRelationshipDto.getSubjectTaskId())
-                .orElseThrow(MyEntityNotFoundException::new);
-        TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipDto.getRelationId())
-                .orElseThrow(MyEntityNotFoundException::new);
-
-        TasksRelationship tasksRelationship = MappingUtils
-                .mapToEntityFromTaskRelationshipDto(sourceTack, subjectTack, type);
-
-        if (tasksRelationshipRepository.findDistinctBySourceTaskAndSubjectTask(
-                tasksRelationship.getSourceTask(),
-                tasksRelationship.getSubjectTask()) == null
-        ) {
-            tasksRelationshipRepository.save(tasksRelationship);
-        } else {
-            throw new EntityAlreadyExistsException();
-        }
-    }
-
-    @Override
-    @Transactional
-    public void updateRelationship(Integer relationshipId, TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
-        tasksRelationshipRepository.findById(relationshipId).ifPresentOrElse(relationship -> {
-            TasksRelationsType type = tasksRelationsTypeRepository
-                    .findById(taskRelationshipUpdateDto.getRelationId()).orElseThrow(MyEntityNotFoundException::new);
-            relationship.setTasksRelationsType(type);
-        }, () -> {
-            throw new MyEntityNotFoundException();
-        });
-    }
-
-    @Override
-    public List<TaskRelationshipDto> getAllTasksRelationships() {
-        return tasksRelationshipRepository.findAll()
-                .stream()
-                .map(MappingUtils::mapToTaskRelationshipDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public TaskRelationshipDto getRelationshipById(Integer taskRelationshipId) {
-        return MappingUtils.mapToTaskRelationshipDto(tasksRelationshipRepository.getById(taskRelationshipId));
-    }
-
-    @Override
-    @Transactional
-    public void deleteRelationshipById(Integer tasksRelationshipId) {
-        tasksRelationshipRepository.findById(tasksRelationshipId)
-                .ifPresentOrElse(relationship -> tasksRelationshipRepository.delete(relationship), () -> {
-                    throw new MyEntityNotFoundException();
-                });
-    }
 }

@@ -8,6 +8,8 @@ import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
+import com.example.demojira.service.mapping.MappingEmployeeGetDto;
+import com.example.demojira.service.mapping.MappingEmployeeRegistrateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private HashWorkerMd5 hw;
 
+    @Autowired
+    private MappingEmployeeGetDto mappingEmployeeGetDto;
+
+    @Autowired
+    private MappingEmployeeRegistrateDto mappingEmployeeRegistrateDto;
+
     @Override
     @Transactional
     public void registrateEmployee(EmployeeRegistrateDto e) {
-        Employee employee = MappingUtils.mapToEntityFromEmployeeRegistrateDto(e, hw.md5Apache(e.getPassword()));
+        Employee employee = mappingEmployeeRegistrateDto.mapToEntity(e, hw.md5Apache(e.getPassword()));
         if (employeeRepository.findByLogin(employee.getLogin()) == null) {
             employeeRepository.save(employee);
         } else {
@@ -39,13 +47,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeGetDto> getAll() {
         return employeeRepository.findAll()
                 .stream()
-                .map(MappingUtils::mapToEmployeeGetDto)
+                .map(mappingEmployeeGetDto::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public EmployeeGetDto getById(Integer employeeId) {
-        return MappingUtils.mapToEmployeeGetDto(employeeRepository.getById(employeeId));
+        return mappingEmployeeGetDto.mapToDto(employeeRepository.getById(employeeId));
     }
 
     @Override

@@ -14,9 +14,6 @@ public class TasksRelationsType {
     @Column(name = "relation_type")
     private String relationType;
 
-    @OneToMany(mappedBy = "tasksRelationsType")
-    private List<TasksRelationship> tasksRelationships;
-
     public Integer getId() {
         return id;
     }

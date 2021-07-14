@@ -30,15 +30,6 @@ public class Task {
     @Column(name = "registered_date")
     private Date registeredDate;
 
-    @OneToMany(mappedBy = "task")
-    private List<Comment> comments;
-
-    @OneToMany(mappedBy = "sourceTask")
-    private List<TasksRelationship> tasksRelationshipsSource;
-
-    @OneToMany(mappedBy = "subjectTask")
-    private List<TasksRelationship> tasksRelationshipsSubject;
-
     public Integer getId() {
         return id;
     }

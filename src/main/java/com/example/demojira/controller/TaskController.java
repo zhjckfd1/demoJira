@@ -5,6 +5,7 @@ import com.example.demojira.dto.*;
 import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.service.TaskService;
+import com.example.demojira.service.TasksRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,10 +21,12 @@ import java.util.List;
 @Tag(name = "Задача", description = "работает с задачами")
 public class TaskController {
     private final TaskService taskService;
+    private final TasksRelationshipService tasksRelationshipService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, TasksRelationshipService tasksRelationshipService) {
         this.taskService = taskService;
+        this.tasksRelationshipService = tasksRelationshipService;
     }
 
     @Operation(
@@ -77,7 +80,7 @@ public class TaskController {
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.POST)
     public ResponseEntity<?> createRelationBetweenTasks(
             @RequestBody TaskRelationshipDto taskRelationshipDto) {
-        taskService.createRelationship(taskRelationshipDto);
+        tasksRelationshipService.createRelationship(taskRelationshipDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -90,7 +93,7 @@ public class TaskController {
     public ResponseEntity<?> updateRelationBetweenTasks(
             @PathVariable(name = "relationshipId") @Parameter(description = "id связи между задачами") @Min(1) Integer relationshipId,
             @RequestBody TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
-        taskService.updateRelationship(relationshipId, taskRelationshipUpdateDto);
+        tasksRelationshipService.updateRelationship(relationshipId, taskRelationshipUpdateDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -100,7 +103,7 @@ public class TaskController {
     )
     @RequestMapping(value = "/tasks/relations", method = RequestMethod.GET)
     public ResponseEntity<List<TaskRelationshipDto>> readAllTasksRelationships() {
-        final List<TaskRelationshipDto> tasksRelationships = taskService.getAllTasksRelationships();
+        final List<TaskRelationshipDto> tasksRelationships = tasksRelationshipService.getAllTasksRelationships();
         return new ResponseEntity<>(tasksRelationships, HttpStatus.OK);
     }
 
@@ -111,7 +114,7 @@ public class TaskController {
     @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.GET)
     public ResponseEntity<TaskRelationshipDto> readTasksRelationship(
             @PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
-        final TaskRelationshipDto task = taskService.getRelationshipById(id);
+        final TaskRelationshipDto task = tasksRelationshipService.getRelationshipById(id);
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
@@ -122,7 +125,7 @@ public class TaskController {
     @RequestMapping(value = "/tasks/relations/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<TaskRelationshipDto> deleteTasksRelationship(
             @PathVariable(name = "id") @Parameter(description = "id связи") @Min(1) Integer id) {
-        taskService.deleteRelationshipById(id);
+        tasksRelationshipService.deleteRelationshipById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

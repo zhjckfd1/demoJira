@@ -15,14 +15,4 @@ public interface TaskService {
     TaskGetDto getById(Integer taskId);
 
     List<TaskGetDto> getAllTasks();
-
-    void createRelationship(TaskRelationshipDto taskRelationshipDto);
-
-    void updateRelationship(Integer relationshipId, TaskRelationshipUpdateDto taskRelationshipUpdateDto);
-
-    List<TaskRelationshipDto> getAllTasksRelationships();
-
-    TaskRelationshipDto getRelationshipById(Integer taskRelationshipId);
-
-    void deleteRelationshipById(Integer tasksRelationshipId);
 }
