@@ -47,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
     private MappingCommentAddDto mappingCommentAddDto;
 
     @Override
+    @Transactional
     public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
         return commentRepository.getAllByTaskIdOrderByCreatedDate(taskId)
                 .stream()
@@ -55,6 +56,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId) {
         return commentRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId)
                 .stream()
@@ -75,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public List<CommentDto> getAll() {
         return commentRepository.findAll()
                 .stream()
@@ -83,6 +86,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentDto getById(Integer commentId) {
         return mappingCommentDto.mapToDto(commentRepository.getById(commentId));
         //getById вернет JPA исключение, если не найдет. Везде делаем по закоментированному варианту?

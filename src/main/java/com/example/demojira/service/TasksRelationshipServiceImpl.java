@@ -74,6 +74,7 @@ public class TasksRelationshipServiceImpl implements TasksRelationshipService{
     }
 
     @Override
+    @Transactional
     public List<TaskRelationshipDto> getAllTasksRelationships() {
         return tasksRelationshipRepository.findAll()
                 .stream()
@@ -82,6 +83,7 @@ public class TasksRelationshipServiceImpl implements TasksRelationshipService{
     }
 
     @Override
+    @Transactional
     public TaskRelationshipDto getRelationshipById(Integer taskRelationshipId) {
         return mappingTaskRelationshipDto.mapToDto(tasksRelationshipRepository.getById(taskRelationshipId));
     }

@@ -44,6 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public List<EmployeeGetDto> getAll() {
         return employeeRepository.findAll()
                 .stream()
@@ -52,6 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeGetDto getById(Integer employeeId) {
         return mappingEmployeeGetDto.mapToDto(employeeRepository.getById(employeeId));
     }

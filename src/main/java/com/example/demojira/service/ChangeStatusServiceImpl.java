@@ -6,6 +6,7 @@ import com.example.demojira.repository.ChangeStatusRepository;
 import com.example.demojira.service.mapping.MappingChangeStatusGetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
     @Autowired
     private MappingChangeStatusGetDto mappingChangeStatusGetDto;
 
+    @Override
+    @Transactional
     public List<ChangeStatusGetDto> getAll(){
         return changeStatusRepository.findAll()
                 .stream()
@@ -26,6 +29,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public List<ChangeStatusGetDto> getAllByBeginTaskStatusId(Integer beginStatusId){
         return changeStatusRepository.getAllByBeginTaskStatusId(beginStatusId)
                 .stream()
@@ -33,6 +38,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public List<ChangeStatusGetDto> getAllByEndTaskStatusId(Integer endStatusId){
         return changeStatusRepository.getAllByEndTaskStatusId(endStatusId)
                 .stream()
@@ -40,6 +47,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
     public ChangeStatusGetDto getById(Integer changeStatusId){
         return mappingChangeStatusGetDto
                 .mapToDto(changeStatusRepository.findById(changeStatusId).orElseThrow(MyEntityNotFoundException::new));

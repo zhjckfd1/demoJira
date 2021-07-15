@@ -98,13 +98,14 @@ public class TaskServiceImpl implements TaskService {
         });
     }
 
-
     @Override
+    @Transactional
     public TaskGetDto getById(Integer taskId) {
         return mappingTaskGetDto.mapToDto(taskRepository.getById(taskId));
     }
 
     @Override
+    @Transactional
     public List<TaskGetDto> getAllTasks() {
         return taskRepository.findAll()
                 .stream()
