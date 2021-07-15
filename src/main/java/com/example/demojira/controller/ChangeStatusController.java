@@ -2,6 +2,7 @@ package com.example.demojira.controller;
 
 import com.example.demojira.dto.ChangeStatusGetDto;
 import com.example.demojira.service.ChangeStatusService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,20 @@ public class ChangeStatusController {
         this.changeStatusService = changeStatusService;
     }
 
+    @Operation(
+            summary = "Получение смен статуса задачи",
+            description = "Позволяет получить все возможные смены статуса задачи"
+    )
     @RequestMapping(value = "/changesStatus", method = RequestMethod.GET)
     public ResponseEntity<List<ChangeStatusGetDto>> readAll() {
         final List<ChangeStatusGetDto> changes = changeStatusService.getAll();
         return new ResponseEntity<>(changes, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Получение смен статуса задачи по id начального статуса",
+            description = "Позволяет получить все возможные смены статуса задачи с заданным id начального статуса"
+    )
     @RequestMapping(value = "/changesStatus/beginStatus/{beginStatusId}", method = RequestMethod.GET)
     public ResponseEntity<List<ChangeStatusGetDto>> readAllByBaseStatus(
             @PathVariable(name = "beginStatusId")
@@ -42,6 +51,10 @@ public class ChangeStatusController {
         return new ResponseEntity<>(changes, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Получение смен статуса задачи по id конечного статуса",
+            description = "Позволяет получить все возможные смены статуса задачи с заданным id конечного статуса"
+    )
     @RequestMapping(value = "/changesStatus/endStatus/{endStatusId}", method = RequestMethod.GET)
     public ResponseEntity<List<ChangeStatusGetDto>> readAllByEndStatus(
             @PathVariable(name = "endStatusId")
@@ -52,6 +65,10 @@ public class ChangeStatusController {
         return new ResponseEntity<>(changes, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Получение смену статуса задачи по ее id",
+            description = "Позволяет получить смену статуса задачи по ее id"
+    )
     @RequestMapping(value = "/changesStatus/{id}", method = RequestMethod.GET)
     public ResponseEntity<ChangeStatusGetDto> read(
             @PathVariable(name = "id") @Parameter(description = "id смены статуса") @Min(1) Integer id) {
