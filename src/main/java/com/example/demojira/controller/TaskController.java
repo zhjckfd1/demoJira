@@ -4,6 +4,7 @@ package com.example.demojira.controller;
 import com.example.demojira.dto.*;
 import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
+import com.example.demojira.service.ChangeStatusService;
 import com.example.demojira.service.TaskService;
 import com.example.demojira.service.TasksRelationshipService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,11 +22,13 @@ import java.util.List;
 @Tag(name = "Задача", description = "работает с задачами")
 public class TaskController {
     private final TaskService taskService;
+    private final ChangeStatusService changeStatusService;
     private final TasksRelationshipService tasksRelationshipService;
 
     @Autowired
-    public TaskController(TaskService taskService, TasksRelationshipService tasksRelationshipService) {
+    public TaskController(TaskService taskService, ChangeStatusService changeStatusService, TasksRelationshipService tasksRelationshipService) {
         this.taskService = taskService;
+        this.changeStatusService = changeStatusService;
         this.tasksRelationshipService = tasksRelationshipService;
     }
 
@@ -70,6 +73,23 @@ public class TaskController {
             @PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
             @RequestBody TaskUpdateDto task) {
         taskService.patchTask(taskId, task);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Обновление статуса задачи",
+            description = "Позволяет изменить статус задачи "
+    )
+    @RequestMapping(value = "/tasks/{taskId}/changeStatus/{statusId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> changeTaskStatus(
+            @PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId,
+            @PathVariable(name = "statusId")
+            @Parameter(description = "id нового статуса задачи")
+            @Min(1)
+                    Integer statusId
+    ) {
+        List<ChangeStatusGetDto> changes = changeStatusService.getAllByEndTaskStatusId(statusId);
+        taskService.patchTaskStatus(taskId, changes, statusId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

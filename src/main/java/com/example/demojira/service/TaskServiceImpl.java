@@ -2,10 +2,12 @@ package com.example.demojira.service;
 
 import com.example.demojira.dto.*;
 import com.example.demojira.exceptions.EntityAlreadyExistsException;
+import com.example.demojira.exceptions.IncorrectStatusChangeException;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.model.*;
 import com.example.demojira.repository.*;
+import com.example.demojira.service.mapping.MappingChangeStatusGetDto;
 import com.example.demojira.service.mapping.MappingTaskGetDto;
 import com.example.demojira.service.mapping.MappingTaskRegistrateDto;
 import com.example.demojira.service.mapping.MappingTaskRelationshipDto;
@@ -63,11 +65,6 @@ public class TaskServiceImpl implements TaskService {
                         .orElseThrow(MyEntityNotFoundException::new);
                 task.setEmployee(emp);
             }
-            if (taskUpdateDto.getTaskStatusId() != null) {
-                TaskStatus ts = taskStatusRepository.findById(taskUpdateDto.getTaskStatusId())
-                        .orElseThrow(MyEntityNotFoundException::new);
-                task.setStatus(ts);
-            }
             if (taskUpdateDto.getTitle() != null) {
                 task.setTitle(taskUpdateDto.getTitle());
             }
@@ -75,6 +72,32 @@ public class TaskServiceImpl implements TaskService {
             throw new MyEntityNotFoundException();
         });
     }
+
+    @Override
+    @Transactional
+    public void patchTaskStatus(Integer taskId, List<ChangeStatusGetDto> changes, Integer newStatusId) {
+        taskRepository.findById(taskId).ifPresentOrElse(task -> {
+            boolean contain = false;
+            int oldStatusId = task.getStatus().getId();
+            for (ChangeStatusGetDto change : changes) {
+                if (change.getBeginStatusId().equals(oldStatusId)) {
+                    contain = true;
+                    break;
+                }
+            }
+            if (contain) {
+                TaskStatus ts = taskStatusRepository.findById(newStatusId)
+                        .orElseThrow(MyEntityNotFoundException::new);
+                task.setStatus(ts);
+            } else {
+                throw new IncorrectStatusChangeException();
+            }
+
+        }, () -> {
+            throw new MyEntityNotFoundException();
+        });
+    }
+
 
     @Override
     public TaskGetDto getById(Integer taskId) {

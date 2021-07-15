@@ -32,13 +32,23 @@ public class ChangeStatusController {
         return new ResponseEntity<>(changes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/changesStatus/baseStatus/{baseStatusId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/changesStatus/beginStatus/{beginStatusId}", method = RequestMethod.GET)
     public ResponseEntity<List<ChangeStatusGetDto>> readAllByBaseStatus(
-            @PathVariable(name = "baseStatusId")
+            @PathVariable(name = "beginStatusId")
             @Parameter(description = "id начального статуса")
             @Min(1)
-                    Integer baseStatusId) {
-        final List<ChangeStatusGetDto> changes = changeStatusService.getAllByBeginTaskStatusId(baseStatusId);
+                    Integer beginStatusId) {
+        final List<ChangeStatusGetDto> changes = changeStatusService.getAllByBeginTaskStatusId(beginStatusId);
+        return new ResponseEntity<>(changes, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/changesStatus/endStatus/{endStatusId}", method = RequestMethod.GET)
+    public ResponseEntity<List<ChangeStatusGetDto>> readAllByEndStatus(
+            @PathVariable(name = "endStatusId")
+            @Parameter(description = "id конечного статуса")
+            @Min(1)
+                    Integer endStatusId) {
+        final List<ChangeStatusGetDto> changes = changeStatusService.getAllByEndTaskStatusId(endStatusId);
         return new ResponseEntity<>(changes, HttpStatus.OK);
     }
 

@@ -13,5 +13,9 @@ public interface ChangeStatusService {
 
     List<ChangeStatusGetDto> getAllByBeginTaskStatusId(Integer beginStatusId);
 
+    List<ChangeStatusGetDto> getAllByEndTaskStatusId(Integer endStatusId);
+
     ChangeStatusGetDto getById(Integer changeStatusId);
+
+
 }

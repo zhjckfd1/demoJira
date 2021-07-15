@@ -33,6 +33,13 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
                 .collect(Collectors.toList());
     }
 
+    public List<ChangeStatusGetDto> getAllByEndTaskStatusId(Integer endStatusId){
+        return changeStatusRepository.getAllByEndTaskStatusId(endStatusId)
+                .stream()
+                .map(mappingChangeStatusGetDto::mapToDto)
+                .collect(Collectors.toList());
+    }
+
     public ChangeStatusGetDto getById(Integer changeStatusId){
         return mappingChangeStatusGetDto
                 .mapToDto(changeStatusRepository.findById(changeStatusId).orElseThrow(MyEntityNotFoundException::new));

@@ -11,4 +11,6 @@ public interface ChangeStatusRepository extends JpaRepository<ChangeStatus, Inte
 
     List<ChangeStatus> getAllByBeginTaskStatusId(Integer id);
 
+    List<ChangeStatus> getAllByEndTaskStatusId(Integer id);
+
 }

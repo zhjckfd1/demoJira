@@ -1,18 +1,9 @@
 package com.example.demojira.dto;
 
 public class TaskUpdateDto {
-    private Integer taskStatusId;
     private Integer employeeId;
     private String title;
     private String description;
-
-    public Integer getTaskStatusId() {
-        return taskStatusId;
-    }
-
-    public void setTaskStatusId(Integer taskStatusId) {
-        this.taskStatusId = taskStatusId;
-    }
 
     public Integer getEmployeeId() {
         return employeeId;
