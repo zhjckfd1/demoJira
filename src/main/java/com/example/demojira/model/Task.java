@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "tasks")
 public class Task {
+
     @Id
     @Column(name = "task_id")
     @SequenceGenerator(name = "sti", sequenceName="sequence_task_id", allocationSize=1)

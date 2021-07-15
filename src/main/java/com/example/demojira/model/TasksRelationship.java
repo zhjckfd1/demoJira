@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tasks_relationships")
 public class TasksRelationship {
+
     @Id
     @Column(name = "relationship_id")
     @SequenceGenerator(name = "stri", sequenceName="sequence_tasks_relationship_id", allocationSize=1)

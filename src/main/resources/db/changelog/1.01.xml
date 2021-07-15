@@ -234,4 +234,231 @@
         </sql>
     </changeSet>
 
+    <changeSet id="53" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            UPDATE tasks_statuses
+            SET status = 'Выполнено'
+            WHERE status_id = 2;
+        </sql>
+    </changeSet>
+
+    <changeSet id="54" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            UPDATE tasks_statuses
+            SET status = 'Открыто'
+            WHERE status_id = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="55" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_statuses
+            (status_id, status, code)
+            VALUES
+            (3, 'В работе', 'WORK');
+        </sql>
+    </changeSet>
+
+    <changeSet id="56" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="tasks_statuses"/>
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+            <columnExists tableName="tasks_statuses" columnName="status"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_statuses
+            (status_id, status, code)
+            VALUES
+            (4, 'На тестировании', 'TEST');
+        </sql>
+    </changeSet>
+
+    <changeSet id="57" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_statuses" columnNames="code"/>
+            </not>
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+        </preConditions>
+        <sql>
+            create UNIQUE index i_tasks_statuses_code on tasks_statuses (code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="58" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="changes_status"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table changes_status
+            (
+            change_status_id Number(5),
+            begin_status_id Number(3) not null,
+            end_status_id Number(3) not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="59" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_changes_status" tableName="changes_status" />
+            </not>
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="change_status_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE changes_status
+            ADD CONSTRAINT pk_changes_status PRIMARY KEY (change_status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="60" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_changes_status_begin_status"/>
+            </not>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            alter table changes_status
+            ADD CONSTRAINT fk_changes_status_begin_status
+            FOREIGN KEY (begin_status_id)
+            REFERENCES tasks_statuses (status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="61" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_changes_status_end_status"/>
+            </not>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+            <columnExists tableName="tasks_statuses" columnName="status_id"/>
+        </preConditions>
+        <sql>
+            alter table changes_status
+            ADD CONSTRAINT fk_changes_status_end_status
+            FOREIGN KEY (end_status_id)
+            REFERENCES tasks_statuses (status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="62" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE changes_status
+            ADD CONSTRAINT check_status_discrepancy
+            CHECK (begin_status_id != end_status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="63" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="changes_status" columnNames="begin_status_id"/>
+            </not>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+        </preConditions>
+        <sql>
+            create index i_changes_status_begin_status on changes_status (begin_status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="64" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="changes_status" columnNames="end_status_id"/>
+            </not>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            create index i_changes_status_end_status on changes_status (end_status_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="65" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="change_status_id"/>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO changes_status
+            (change_status_id, begin_status_id, end_status_id)
+            VALUES
+            (1, 1, 3);
+        </sql>
+    </changeSet>
+
+    <changeSet id="66" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="change_status_id"/>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO changes_status
+            (change_status_id, begin_status_id, end_status_id)
+            VALUES
+            (2, 3, 4);
+        </sql>
+    </changeSet>
+
+    <changeSet id="67" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="change_status_id"/>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO changes_status
+            (change_status_id, begin_status_id, end_status_id)
+            VALUES
+            (3, 4, 2);
+        </sql>
+    </changeSet>
+
+    <changeSet id="68" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="changes_status"/>
+            <columnExists tableName="changes_status" columnName="change_status_id"/>
+            <columnExists tableName="changes_status" columnName="begin_status_id"/>
+            <columnExists tableName="changes_status" columnName="end_status_id"/>
+        </preConditions>
+        <sql>
+            INSERT INTO changes_status
+            (change_status_id, begin_status_id, end_status_id)
+            VALUES
+            (4, 4, 1);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

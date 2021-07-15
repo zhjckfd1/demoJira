@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//@Repository
+@Repository        //нужен?
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
+
     List<Comment> getAllByTaskIdOrderByCreatedDate(Integer taskId);
 
     List<Comment> getAllByEmployeeIdOrderByCreatedDate(Integer employeeId);

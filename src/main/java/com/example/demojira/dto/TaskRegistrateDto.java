@@ -5,7 +5,6 @@ public class TaskRegistrateDto {
     private String title;
     private String description;
 
-
     public Integer getEmployeeId() {
         return employeeId;
     }

@@ -6,6 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "tasks_statuses")
 public class TaskStatus {
+
     @Id
     @Column(name = "status_id")
     private Integer id;

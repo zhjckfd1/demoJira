@@ -88,10 +88,12 @@ public class TaskController {
             summary = "Обновляет связь между задачами",
             description = "Позволяет обновить связь между задачами"
     )
-    //как правильно перенести?
     @RequestMapping(value = "/tasks/relations/{relationshipId}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateRelationBetweenTasks(
-            @PathVariable(name = "relationshipId") @Parameter(description = "id связи между задачами") @Min(1) Integer relationshipId,
+            @PathVariable(name = "relationshipId")
+            @Parameter(description = "id связи между задачами")
+            @Min(1)
+                    Integer relationshipId,
             @RequestBody TaskRelationshipUpdateDto taskRelationshipUpdateDto) {
         tasksRelationshipService.updateRelationship(relationshipId, taskRelationshipUpdateDto);
         return new ResponseEntity<>(HttpStatus.OK);
