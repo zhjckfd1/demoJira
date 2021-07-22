@@ -5,7 +5,7 @@ import com.example.demojira.model.ChangeStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingChangeStatusGetDto {
+public class ChangeStatusGetDtoMapping {
     public ChangeStatusGetDto mapToDto(ChangeStatus entity) {
         ChangeStatusGetDto changeStatusGetDto = new ChangeStatusGetDto();
         changeStatusGetDto.setBeginStatusId(entity.getBeginTaskStatus().getId());

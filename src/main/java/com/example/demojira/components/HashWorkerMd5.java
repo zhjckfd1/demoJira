@@ -1,15 +1,13 @@
 package com.example.demojira.components;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component()
+@Component
 public class HashWorkerMd5 {
+    @Value("${ru.mmtr.demojira.hash.salt}")
     private String salt;
-
-    public HashWorkerMd5(){
-        this.salt = "42";
-    }
 
     public String getSalt() {
         return salt;

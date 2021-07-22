@@ -11,7 +11,7 @@ import com.example.demojira.model.TasksRelationship;
 import com.example.demojira.repository.TaskRepository;
 import com.example.demojira.repository.TasksRelationsTypeRepository;
 import com.example.demojira.repository.TasksRelationshipRepository;
-import com.example.demojira.service.mapping.MappingTaskRelationshipDto;
+import com.example.demojira.service.mapping.TaskRelationshipDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class TasksRelationshipServiceImpl implements TasksRelationshipService{
     private TasksRelationsTypeRepository tasksRelationsTypeRepository;
 
     @Autowired
-    private MappingTaskRelationshipDto mappingTaskRelationshipDto;
+    private TaskRelationshipDtoMapping taskRelationshipDtoMapping;
 
     @Override
     @Transactional
@@ -48,7 +48,7 @@ public class TasksRelationshipServiceImpl implements TasksRelationshipService{
         TasksRelationsType type = tasksRelationsTypeRepository.findById(taskRelationshipDto.getRelationId())
                 .orElseThrow(MyEntityNotFoundException::new);
 
-        TasksRelationship tasksRelationship = MappingTaskRelationshipDto
+        TasksRelationship tasksRelationship = TaskRelationshipDtoMapping
                 .mapToEntity(sourceTack, subjectTack, type);
 
         if (tasksRelationshipRepository.findDistinctBySourceTaskAndSubjectTask(
@@ -78,14 +78,15 @@ public class TasksRelationshipServiceImpl implements TasksRelationshipService{
     public List<TaskRelationshipDto> getAllTasksRelationships() {
         return tasksRelationshipRepository.findAll()
                 .stream()
-                .map(mappingTaskRelationshipDto::mapToDto)
+                .map(taskRelationshipDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public TaskRelationshipDto getRelationshipById(Integer taskRelationshipId) {
-        return mappingTaskRelationshipDto.mapToDto(tasksRelationshipRepository.getById(taskRelationshipId));
+        return taskRelationshipDtoMapping.mapToDto(
+                tasksRelationshipRepository.findById(taskRelationshipId).orElseThrow(MyEntityNotFoundException::new));
     }
 
     @Override

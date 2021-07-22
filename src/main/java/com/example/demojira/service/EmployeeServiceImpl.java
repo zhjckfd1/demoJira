@@ -8,8 +8,8 @@ import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.model.Employee;
 import com.example.demojira.repository.EmployeeRepository;
-import com.example.demojira.service.mapping.MappingEmployeeGetDto;
-import com.example.demojira.service.mapping.MappingEmployeeRegistrateDto;
+import com.example.demojira.service.mapping.EmployeeGetDtoMapping;
+import com.example.demojira.service.mapping.EmployeeRegistrateDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,22 +20,33 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
+    //@Autowired
     private EmployeeRepository employeeRepository;
 
-    @Autowired
-    private HashWorkerMd5 hw;
+    //@Autowired
+    private HashWorkerMd5 hashWorkerMd5;
+
+    //@Autowired
+    private EmployeeGetDtoMapping employeeGetDtoMapping;
+
+    //@Autowired
+    private EmployeeRegistrateDtoMapping employeeRegistrateDtoMapping;
 
     @Autowired
-    private MappingEmployeeGetDto mappingEmployeeGetDto;
-
-    @Autowired
-    private MappingEmployeeRegistrateDto mappingEmployeeRegistrateDto;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+                               HashWorkerMd5 hashWorkerMd5,
+                               EmployeeGetDtoMapping employeeGetDtoMapping,
+                               EmployeeRegistrateDtoMapping employeeRegistrateDtoMapping){
+        this.employeeRepository = employeeRepository;
+        this.hashWorkerMd5 = hashWorkerMd5;
+        this.employeeGetDtoMapping = employeeGetDtoMapping;
+        this.employeeRegistrateDtoMapping = employeeRegistrateDtoMapping;
+    }
 
     @Override
     @Transactional
     public void registrateEmployee(EmployeeRegistrateDto e) {
-        Employee employee = mappingEmployeeRegistrateDto.mapToEntity(e, hw.md5Apache(e.getPassword()));
+        Employee employee = employeeRegistrateDtoMapping.mapToEntity(e, hashWorkerMd5.md5Apache(e.getPassword()));
         if (employeeRepository.findByLogin(employee.getLogin()) == null) {
             employeeRepository.save(employee);
         } else {
@@ -48,14 +59,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeGetDto> getAll() {
         return employeeRepository.findAll()
                 .stream()
-                .map(mappingEmployeeGetDto::mapToDto)
+                .map(employeeGetDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public EmployeeGetDto getById(Integer employeeId) {
-        return mappingEmployeeGetDto.mapToDto(employeeRepository.getById(employeeId));
+        return employeeGetDtoMapping
+                .mapToDto(employeeRepository.findById(employeeId).orElseThrow(MyEntityNotFoundException::new));
     }
 
     @Override
@@ -72,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setPatronymic(employeeDto.getPatronymic());
             }
             if (employeeDto.getPassword() != null) {
-                employee.setPassword(hw.md5Apache(employeeDto.getPassword()));
+                employee.setPassword(hashWorkerMd5.md5Apache(employeeDto.getPassword()));
             }
         }, () -> {
             throw new MyEntityNotFoundException();
@@ -82,7 +94,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public void changeActive(Integer employeeId) {
-        Employee e = employeeRepository.getById(employeeId);
+        //Employee e = employeeRepository.getById(employeeId);
+        Employee e = employeeRepository.findById(employeeId).orElseThrow(MyEntityNotFoundException::new);
         e.setActive(!e.getActive());
     }
 

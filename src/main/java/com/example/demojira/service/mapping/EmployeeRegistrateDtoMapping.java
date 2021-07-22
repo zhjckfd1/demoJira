@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class MappingEmployeeRegistrateDto {
+public class EmployeeRegistrateDtoMapping {
     public Employee mapToEntity(EmployeeRegistrateDto employeeRegistrateDto, String password) {
         Employee employee = new Employee();
         employee.setLogin(employeeRegistrateDto.getLogin());

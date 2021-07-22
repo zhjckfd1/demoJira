@@ -3,7 +3,7 @@ package com.example.demojira.service;
 import com.example.demojira.dto.ChangeStatusGetDto;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.repository.ChangeStatusRepository;
-import com.example.demojira.service.mapping.MappingChangeStatusGetDto;
+import com.example.demojira.service.mapping.ChangeStatusGetDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
     private ChangeStatusRepository changeStatusRepository;
 
     @Autowired
-    private MappingChangeStatusGetDto mappingChangeStatusGetDto;
+    private ChangeStatusGetDtoMapping mappingChangeStatusGetDto;
 
     @Override
     @Transactional

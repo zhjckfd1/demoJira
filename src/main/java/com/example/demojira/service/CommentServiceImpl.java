@@ -11,10 +11,10 @@ import com.example.demojira.model.Task;
 import com.example.demojira.repository.CommentRepository;
 import com.example.demojira.repository.EmployeeRepository;
 import com.example.demojira.repository.TaskRepository;
-import com.example.demojira.service.mapping.MappingCommentAddDto;
-import com.example.demojira.service.mapping.MappingCommentDto;
-import com.example.demojira.service.mapping.MappingCommentEmployeeDto;
-import com.example.demojira.service.mapping.MappingCommentTaskDto;
+import com.example.demojira.service.mapping.CommentAddDtoMapping;
+import com.example.demojira.service.mapping.CommentDtoMapping;
+import com.example.demojira.service.mapping.CommentEmployeeDtoMapping;
+import com.example.demojira.service.mapping.CommentTaskDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,23 +35,23 @@ public class CommentServiceImpl implements CommentService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private MappingCommentDto mappingCommentDto;
+    private CommentDtoMapping commentDtoMapping;
 
     @Autowired
-    private MappingCommentEmployeeDto mappingCommentEmployeeDto;
+    private CommentEmployeeDtoMapping commentEmployeeDtoMapping;
 
     @Autowired
-    private MappingCommentTaskDto mappingCommentTaskDto;
+    private CommentTaskDtoMapping commentTaskDtoMapping;
 
     @Autowired
-    private MappingCommentAddDto mappingCommentAddDto;
+    private CommentAddDtoMapping commentAddDtoMapping;
 
     @Override
     @Transactional
     public List<CommentTaskDto> getAllCommentsOnTheTask(Integer taskId) {
         return commentRepository.getAllByTaskIdOrderByCreatedDate(taskId)
                 .stream()
-                .map(mappingCommentTaskDto::mapToDto)
+                .map(commentTaskDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentEmployeeDto> getAllCommentsOnTheEmployee(Integer employeeId) {
         return commentRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId)
                 .stream()
-                .map(mappingCommentEmployeeDto::mapToDto)
+                .map(commentEmployeeDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId())
                 .orElseThrow(MyEntityNotFoundException::new);
 
-        Comment comment = mappingCommentAddDto.mapToEntity(commentAddDto, task, employee);
+        Comment comment = commentAddDtoMapping.mapToEntity(commentAddDto, task, employee);
         commentRepository.save(comment);
     }
 
@@ -81,17 +81,14 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getAll() {
         return commentRepository.findAll()
                 .stream()
-                .map(mappingCommentDto::mapToDto)
+                .map(commentDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public CommentDto getById(Integer commentId) {
-        return mappingCommentDto.mapToDto(commentRepository.getById(commentId));
-        //getById вернет JPA исключение, если не найдет. Везде делаем по закоментированному варианту?
-
-        //return mappingCommentDto.mapToDto(commentRepository.findById(commentId).orElseThrow(MyEntityNotFoundException::new));
-
+        return commentDtoMapping
+                .mapToDto(commentRepository.findById(commentId).orElseThrow(MyEntityNotFoundException::new));
     }
 }

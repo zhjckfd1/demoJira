@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.persistence.EntityNotFoundException;
-
-
 @ControllerAdvice
 public class ExceptionHandlingController {
     @ResponseStatus(value= HttpStatus.NOT_FOUND)  // 404
-    @ExceptionHandler({MyEntityNotFoundException.class, EntityNotFoundException.class})  //?
+    @ExceptionHandler({MyEntityNotFoundException.class})
     public void notFound() {
         // Nothing to do
     }

@@ -1,16 +1,12 @@
 package com.example.demojira.service;
 
 import com.example.demojira.dto.*;
-import com.example.demojira.exceptions.EntityAlreadyExistsException;
 import com.example.demojira.exceptions.IncorrectStatusChangeException;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
-import com.example.demojira.exceptions.TryingToCreateABondOnYourselfException;
 import com.example.demojira.model.*;
 import com.example.demojira.repository.*;
-import com.example.demojira.service.mapping.MappingChangeStatusGetDto;
-import com.example.demojira.service.mapping.MappingTaskGetDto;
-import com.example.demojira.service.mapping.MappingTaskRegistrateDto;
-import com.example.demojira.service.mapping.MappingTaskRelationshipDto;
+import com.example.demojira.service.mapping.TaskGetDtoMapping;
+import com.example.demojira.service.mapping.TaskRegistrateDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +27,10 @@ public class TaskServiceImpl implements TaskService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private MappingTaskGetDto mappingTaskGetDto;
+    private TaskGetDtoMapping taskGetDtoMapping;
 
     @Autowired
-    private MappingTaskRegistrateDto mappingTaskRegistrateDto;
+    private TaskRegistrateDtoMapping taskRegistrateDtoMapping;
 
     private static final String START_STATUS = "BASE";
 
@@ -46,7 +42,7 @@ public class TaskServiceImpl implements TaskService {
         TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
 
         if (ts != null) {
-            Task task = mappingTaskRegistrateDto.mapToEntity(trd, ts, employee);
+            Task task = taskRegistrateDtoMapping.mapToEntity(trd, ts, employee);
             taskRepository.save(task);
         } else {
             throw new MyEntityNotFoundException();
@@ -101,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskGetDto getById(Integer taskId) {
-        return mappingTaskGetDto.mapToDto(taskRepository.getById(taskId));
+        return taskGetDtoMapping.mapToDto(taskRepository.findById(taskId).orElseThrow(MyEntityNotFoundException::new));
     }
 
     @Override
@@ -109,7 +105,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskGetDto> getAllTasks() {
         return taskRepository.findAll()
                 .stream()
-                .map(mappingTaskGetDto::mapToDto)
+                .map(taskGetDtoMapping::mapToDto)
                 .collect(Collectors.toList());
     }
 

@@ -7,7 +7,7 @@ import com.example.demojira.model.TasksRelationship;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingTaskRelationshipDto {
+public class TaskRelationshipDtoMapping {
     public TaskRelationshipDto mapToDto(TasksRelationship entity) {
         TaskRelationshipDto taskRelationshipDto = new TaskRelationshipDto();
         taskRelationshipDto.setRelationId(entity.getTasksRelationsType().getId());
