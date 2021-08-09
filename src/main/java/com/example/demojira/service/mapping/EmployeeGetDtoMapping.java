@@ -5,7 +5,7 @@ import com.example.demojira.model.Employee;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingEmployeeGetDto {
+public class EmployeeGetDtoMapping {
     public EmployeeGetDto mapToDto(Employee entity) {
         EmployeeGetDto employeeDto = new EmployeeGetDto();
         employeeDto.setLogin(entity.getLogin());

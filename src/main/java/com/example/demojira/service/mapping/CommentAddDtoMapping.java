@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class MappingCommentAddDto {
+public class CommentAddDtoMapping {
     public Comment mapToEntity(CommentAddDto commentAddDto, Task task, Employee employee) {
         Comment comment = new Comment();
         comment.setTask(task);

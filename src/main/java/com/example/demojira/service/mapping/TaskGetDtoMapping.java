@@ -5,7 +5,7 @@ import com.example.demojira.model.Task;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingTaskGetDto {
+public class TaskGetDtoMapping {
     public TaskGetDto mapToDto(Task entity) {
         TaskGetDto taskGetDto = new TaskGetDto();
         taskGetDto.setDescription(entity.getDescription());

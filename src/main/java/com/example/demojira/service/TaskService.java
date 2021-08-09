@@ -12,6 +12,9 @@ public interface TaskService {
 
     void patchTask(Integer taskId, TaskUpdateDto taskUpdateDto);
 
+    void patchTaskStatus(Integer taskId, List<ChangeStatusGetDto> changes, Integer newStatusId);
+    //если список пуст - исключение, не пуст - сможем считать из него  (newStatusId не передаем?)
+
     TaskGetDto getById(Integer taskId);
 
     List<TaskGetDto> getAllTasks();

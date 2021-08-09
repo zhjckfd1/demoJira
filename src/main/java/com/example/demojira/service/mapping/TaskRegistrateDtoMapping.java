@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class MappingTaskRegistrateDto {
+public class TaskRegistrateDtoMapping {
     public Task mapToEntity(TaskRegistrateDto taskRegistrateDto, TaskStatus ts, Employee e) {
         Task task = new Task();
         task.setStatus(ts);

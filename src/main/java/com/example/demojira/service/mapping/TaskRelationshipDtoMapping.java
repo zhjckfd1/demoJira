@@ -7,8 +7,7 @@ import com.example.demojira.model.TasksRelationship;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingTaskRelationshipDto {
-    //public TaskRelationshipDto mapToTaskRelationshipDto(TasksRelationship entity) {
+public class TaskRelationshipDtoMapping {
     public TaskRelationshipDto mapToDto(TasksRelationship entity) {
         TaskRelationshipDto taskRelationshipDto = new TaskRelationshipDto();
         taskRelationshipDto.setRelationId(entity.getTasksRelationsType().getId());
@@ -17,7 +16,6 @@ public class MappingTaskRelationshipDto {
         return taskRelationshipDto;
     }
 
-    //public static TasksRelationship mapToEntityFromTaskRelationshipDto (Task sourceTask, Task subjectTask, TasksRelationsType type){
     public static TasksRelationship mapToEntity(Task sourceTask, Task subjectTask, TasksRelationsType type){
         TasksRelationship tasksRelationship = new TasksRelationship();
         tasksRelationship.setSourceTask(sourceTask);

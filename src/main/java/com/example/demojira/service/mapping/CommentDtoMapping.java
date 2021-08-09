@@ -5,7 +5,7 @@ import com.example.demojira.model.Comment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingCommentDto {
+public class CommentDtoMapping {
     public CommentDto mapToDto(Comment entity) {
         CommentDto commentDto = new CommentDto();
         commentDto.setTaskId(entity.getTask().getId());
