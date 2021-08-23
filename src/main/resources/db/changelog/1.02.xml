@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="69" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks_relations_types" columnName="CODE"/>
+            </not>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+        </preConditions>
+        <sql>
+            alter table tasks_relations_types
+                add CODE varchar2(20 char);
+        </sql>
+    </changeSet>
+
+    <changeSet id="70" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="CODE"/>
+        </preConditions>
+        <sql>
+            UPDATE tasks_relations_types
+            SET CODE = 'generates'
+            WHERE RELATION_ID = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="71" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="CODE"/>
+        </preConditions>
+        <sql>
+            UPDATE tasks_relations_types
+            SET CODE = 'blocks'
+            WHERE RELATION_ID = 2;
+        </sql>
+    </changeSet>
+
+    <changeSet id="72" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_relations_types" columnName="relation_id"/>
+            <columnExists tableName="tasks_relations_types" columnName="relation_type"/>
+            <columnExists tableName="tasks_relations_types" columnName="CODE"/>
+        </preConditions>
+        <sql>
+            INSERT INTO tasks_relations_types
+                (relation_id, relation_type, CODE)
+            values (3, 'дублирует', 'duplicates')
+        </sql>
+    </changeSet>
+
+    <changeSet id="73" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="tasks_relations_types" columnNames="code"/>
+            </not>
+            <columnExists tableName="tasks_relations_types" columnName="code"/>
+        </preConditions>
+        <sql>
+            create UNIQUE index i_tasks_relations_types_code on tasks_relations_types (code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="74" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_relations_types" columnName="code"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_relations_types
+                MODIFY code varchar2(20 char) not null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="75" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tasks_statuses" columnName="code"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE tasks_statuses
+                MODIFY code varchar2(20 char) not null;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
