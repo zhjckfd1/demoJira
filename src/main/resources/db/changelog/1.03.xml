@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="76" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="sequence_report_id"/>
+            </not>
+        </preConditions>
+        <sql>
+            create sequence sequence_report_id start with 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="77" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reports"/>
+            </not>
+        </preConditions>
+        <sql>
+            create table reports
+            (
+                report_id Number(6),
+                employee_id NUMBER(6) not null,
+                task_id NUMBER(30) not null,
+                description varchar2(255 char) not null,
+                time_spent NUMBER(30) not null,
+                created_date DATE not null
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="78" author="Sonin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_reports" tableName="reports" />
+            </not>
+            <columnExists tableName="reports" columnName="report_id"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE reports
+                ADD CONSTRAINT pk_reports PRIMARY KEY (report_id);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
