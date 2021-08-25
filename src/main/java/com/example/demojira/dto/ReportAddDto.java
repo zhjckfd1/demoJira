@@ -1,9 +1,11 @@
 package com.example.demojira.dto;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 public class ReportAddDto {
+    //(1 DTO, но с использованием аннотаций и интерфейсов?)
+    //https://habr.com/ru/post/343960/
+
     @NotNull
     private Integer taskId;
     @NotNull

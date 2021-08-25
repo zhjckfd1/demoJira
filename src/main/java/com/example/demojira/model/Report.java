@@ -28,8 +28,8 @@ public class Report {
     //проверяем через DTO => проверки убираем?
     //@NotNull
     //@NotEmpty
-    @NotBlank(message = "Description is mandatory")
-    @Column(name = "description", nullable = false)
+    //@NotBlank(message = "Description is mandatory")
+    @Column(name = "description")
     private String description;
 
     //храним в секундах
