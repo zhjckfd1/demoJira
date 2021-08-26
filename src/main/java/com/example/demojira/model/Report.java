@@ -1,9 +1,6 @@
 package com.example.demojira.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +31,7 @@ public class Report {
 
     //храним в секундах
     @Column(name = "time_spent")
-    private Long timeSpent;
+    private Long spentTime;
 
     //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", columnDefinition = "TIMESTAMP")
@@ -72,12 +69,12 @@ public class Report {
         this.description = description;
     }
 
-    public Long getTimeSpent() {
-        return timeSpent;
+    public Long getSpentTime() {
+        return spentTime;
     }
 
-    public void setTimeSpent(Long timeSpent) {
-        this.timeSpent = timeSpent;
+    public void setSpentTime(Long timeSpent) {
+        this.spentTime = timeSpent;
     }
 
     public LocalDateTime getCreatedDate() {

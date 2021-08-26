@@ -12,7 +12,7 @@ public class ReportGetDtoMapping {
         reportDto.setDescription(report.getDescription());
         reportDto.setEmployeeId(report.getEmployee().getId());
         reportDto.setTaskId(report.getTask().getId());
-        reportDto.setTimeSpent(report.getTimeSpent());
+        reportDto.setSpentTime(report.getSpentTime());
         return reportDto;
     }
 }

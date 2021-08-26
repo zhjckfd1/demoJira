@@ -1,13 +1,12 @@
 package com.example.demojira.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ReportGetDto {
     private Integer taskId;
     private Integer employeeId;
     private String description;
-    private Long timeSpent;
+    private Long spentTime;
     private LocalDateTime createdDate;
 
     public Integer getTaskId() {
@@ -34,12 +33,12 @@ public class ReportGetDto {
         this.description = description;
     }
 
-    public Long getTimeSpent() {
-        return timeSpent;
+    public Long getSpentTime() {
+        return spentTime;
     }
 
-    public void setTimeSpent(Long timeSpent) {
-        this.timeSpent = timeSpent;
+    public void setSpentTime(Long spentTime) {
+        this.spentTime = spentTime;
     }
 
     public LocalDateTime getCreatedDate() {

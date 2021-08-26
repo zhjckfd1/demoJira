@@ -13,7 +13,7 @@ public class ReportAddDto {
     @NotNull
     private String description;
     @NotNull
-    private Long timeSpent;
+    private Long spentTime;
 
     public Integer getTaskId() {
         return taskId;
@@ -39,11 +39,11 @@ public class ReportAddDto {
         this.description = description;
     }
 
-    public Long getTimeSpent() {
-        return timeSpent;
+    public Long getSpentTime() {
+        return spentTime;
     }
 
-    public void setTimeSpent(Long timeSpent) {
-        this.timeSpent = timeSpent;
+    public void setSpentTime(Long spentTime) {
+        this.spentTime = spentTime;
     }
 }

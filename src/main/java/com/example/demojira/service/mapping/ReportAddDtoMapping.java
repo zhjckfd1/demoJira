@@ -26,7 +26,7 @@ public class ReportAddDtoMapping {
         //@NotNull ?   (javax.validation.ConstraintViolationException)
         //неправильно понял @Repository? (https://www.baeldung.com/spring-component-repository-service)
 
-        report.setTimeSpent(reportAddDto.getTimeSpent());
+        report.setSpentTime(reportAddDto.getSpentTime());
         return report;
     }
 }
