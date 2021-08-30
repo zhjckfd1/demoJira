@@ -13,7 +13,6 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sri")
     private Integer id;
 
-    //, nullable = false
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -22,10 +21,6 @@ public class Report {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    //проверяем через DTO => проверки убираем?
-    //@NotNull
-    //@NotEmpty
-    //@NotBlank(message = "Description is mandatory")
     @Column(name = "description")
     private String description;
 

@@ -1,6 +1,7 @@
 package com.example.demojira.service;
 
 import com.example.demojira.dto.ReportAddDto;
+import com.example.demojira.dto.ReportCriteriaDto;
 import com.example.demojira.dto.ReportGetDto;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
 import com.example.demojira.model.Employee;
@@ -12,9 +13,11 @@ import com.example.demojira.repository.TaskRepository;
 import com.example.demojira.service.mapping.ReportAddDtoMapping;
 import com.example.demojira.service.mapping.ReportGetDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +80,17 @@ public class ReportServiceImpl implements ReportService {
                 .stream()
                 .map(reportGetDtoMapping::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<ReportGetDto> getAllByCriteria(ReportCriteriaDto reportCriteriaDto){
+        return reportRepository.getAllByCriteria(reportCriteriaDto.getTaskId(), reportCriteriaDto.getEmployeeId())
+                .stream()
+                .map(reportGetDtoMapping::mapToDto)
+                .collect(Collectors.toList());
+        //переименовываем в ReportGetDtoConverter?
+        //попробовать библиотеку ModelMapper? (в теории избавимся от пакета mapping)
     }
 
     @Override
