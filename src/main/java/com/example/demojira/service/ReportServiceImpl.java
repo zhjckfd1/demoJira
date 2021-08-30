@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public List<ReportGetDto> getAllReportsOnTheTask(Integer taskId) {
+    public List<ReportGetDto> getAllReportsOnTheTaskId(Integer taskId) {
         return reportRepository.getAllByTaskIdOrderByCreatedDate(taskId)
                 .stream()
                 .map(reportGetDtoMapping::mapToDto)
@@ -72,7 +72,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public List<ReportGetDto> getAllReportsOnTheEmployee(Integer employeeId) {
+    public List<ReportGetDto> getAllReportsOnTheEmployeeId(Integer employeeId) {
         return reportRepository.getAllByEmployeeIdOrderByCreatedDate(employeeId)
                 .stream()
                 .map(reportGetDtoMapping::mapToDto)

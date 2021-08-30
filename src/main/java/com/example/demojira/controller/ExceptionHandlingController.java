@@ -35,12 +35,4 @@ public class ExceptionHandlingController {
         // Nothing to do
     }
 
-    /*
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler({IllegalArgumentException.class})
-    public void incorrectLinkId() {
-        // Nothing to do
-    }
-    */
-
 }

@@ -53,7 +53,7 @@ public class ReportController {
     @RequestMapping(value = "/reports/tasks/{taskId}",  method = RequestMethod.GET)
     public ResponseEntity<List<ReportGetDto>> readTaskReports(
             @PathVariable(name = "taskId") @Parameter(description = "id задачи") @Min(1) Integer taskId) {
-        final List<ReportGetDto> reports = reportService.getAllReportsOnTheTask(taskId);
+        final List<ReportGetDto> reports = reportService.getAllReportsOnTheTaskId(taskId);
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 
@@ -64,7 +64,7 @@ public class ReportController {
     @RequestMapping(value = "/reports/employees/{employeeId}",  method = RequestMethod.GET)
     public ResponseEntity<List<ReportGetDto>> readEmployeeReports(
             @PathVariable(name = "employeeId") @Parameter(description = "id сотрудника") @Min(1) Integer employeeId) {
-        final List<ReportGetDto> reports = reportService.getAllReportsOnTheEmployee(employeeId);
+        final List<ReportGetDto> reports = reportService.getAllReportsOnTheEmployeeId(employeeId);
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }
 

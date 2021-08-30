@@ -16,16 +16,6 @@ public class ReportAddDtoMapping {
         report.setEmployee(employee);
         report.setCreatedDate(LocalDateTime.now());
         report.setDescription(reportAddDto.getDescription());
-
-        //аннотируем DTO @NotNull ?
-
-        //отсутствие id связи обрабатываем IllegalArgumentException ?
-        //Optional в DTO (если null - исключение)?     (свое исключение или IllegalArgumentException?)
-        //просто через if-else?
-        //nullable = false?   (hibernate исключение, лишние связи, не нужно?) (org.hibernate.PropertyValueException)
-        //@NotNull ?   (javax.validation.ConstraintViolationException)
-        //неправильно понял @Repository? (https://www.baeldung.com/spring-component-repository-service)
-
         report.setSpentTime(reportAddDto.getSpentTime());
         return report;
     }

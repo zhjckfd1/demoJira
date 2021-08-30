@@ -11,9 +11,9 @@ public interface ReportService {
 
     List<ReportGetDto> getAll();
 
-    List<ReportGetDto> getAllReportsOnTheTask(Integer taskId);
+    List<ReportGetDto> getAllReportsOnTheTaskId(Integer taskId);
 
-    List<ReportGetDto> getAllReportsOnTheEmployee(Integer employeeId);
+    List<ReportGetDto> getAllReportsOnTheEmployeeId(Integer employeeId);
 
     ReportGetDto getById(Integer reportId);
 }
