@@ -30,6 +30,9 @@ public class ReportServiceImpl implements ReportService {
     private final ReportAddDtoMapping reportAddDtoMapping;
     private final ReportGetDtoMapping reportGetDtoMapping;
 
+    private static final String employeeNotFoundMessage = "Не найден сотрудник с id = ";
+    private static final String taskNotFoundMessage = "Не найдена задача с id = ";
+
     @Autowired
     public ReportServiceImpl(ReportRepository reportRepository,
                              TaskRepository taskRepository,
@@ -47,9 +50,11 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     public void createReport(ReportAddDto reportAddDto) {
         Task task = taskRepository.findById(reportAddDto.getTaskId())
-                .orElseThrow(MyEntityNotFoundException::new);
+                .orElseThrow(() -> new MyEntityNotFoundException(
+                        taskNotFoundMessage + reportAddDto.getTaskId()));
         Employee employee = employeeRepository.findById(reportAddDto.getEmployeeId())
-                .orElseThrow(MyEntityNotFoundException::new);
+                .orElseThrow(() -> new MyEntityNotFoundException(
+                        employeeNotFoundMessage + reportAddDto.getEmployeeId()));
 
         Report report = reportAddDtoMapping.mapToEntity(reportAddDto, task, employee);
         reportRepository.save(report);

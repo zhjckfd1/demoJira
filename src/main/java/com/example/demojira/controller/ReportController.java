@@ -30,10 +30,13 @@ public class ReportController {
             summary = "Создание отчета",
             description = "Позволяет создать отчет"
     )
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/reports",  method = RequestMethod.POST)
-    public ResponseEntity<?> create(@RequestBody @Valid ReportAddDto reportAddDto) {
+    public String create(@RequestBody @Valid ReportAddDto reportAddDto) {
         reportService.createReport(reportAddDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return "created";
+        //return new ResponseEntity<>("Create", HttpStatus.CREATED);
     }
 
     @Operation(
