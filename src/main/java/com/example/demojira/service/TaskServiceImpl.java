@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void addTask(TaskRegistrateDto trd) {
         Employee employee = employeeRepository.findById(trd.getEmployeeId())
-                .orElseThrow(() -> new MyEntityNotFoundException(Employee.class.getName()));
+                .orElseThrow(() -> new MyEntityNotFoundException("Не найден сотрудник с id = " + trd.getEmployeeId()));
         TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
 
         if (ts != null) {
