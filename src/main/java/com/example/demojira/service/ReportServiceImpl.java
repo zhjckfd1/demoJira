@@ -84,7 +84,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public List<ReportGetDto> getAllByCriteria(ReportCriteriaDto reportCriteriaDto){
+    public List<ReportGetDto> getAllByCriteria(ReportCriteriaDto reportCriteriaDto) {
         return reportRepository.getAllByCriteria(reportCriteriaDto.getTaskId(), reportCriteriaDto.getEmployeeId())
                 .stream()
                 .map(reportGetDtoMapping::mapToDto)
@@ -97,6 +97,8 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     public ReportGetDto getById(Integer reportId) {
         return reportGetDtoMapping
-                .mapToDto(reportRepository.findById(reportId).orElseThrow(MyEntityNotFoundException::new));
+                .mapToDto(reportRepository
+                        .findById(reportId)
+                        .orElseThrow(() -> new MyEntityNotFoundException(reportId)));
     }
 }
