@@ -26,7 +26,7 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom{
 
         List<Predicate> predicates = new ArrayList<>();
         if (taskId != null) {
-            predicates.add(criteriaBuilder.equal(root.get("task"), taskId)); //taskId
+            predicates.add(criteriaBuilder.equal(root.get("task"), taskId));
         }
         if (employeeId != null) {
             predicates.add(criteriaBuilder.equal(root.get("employee"), employeeId));

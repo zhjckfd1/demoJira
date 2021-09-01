@@ -14,7 +14,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-//@Validated
 @RestController
 @Tag(name="Отчет", description="работает с отчетами сотрудников")
 public class ReportController {
@@ -36,7 +35,6 @@ public class ReportController {
     public String create(@RequestBody @Valid ReportAddDto reportAddDto) {
         reportService.createReport(reportAddDto);
         return "created";
-        //return new ResponseEntity<>("Create", HttpStatus.CREATED);
     }
 
     @Operation(
