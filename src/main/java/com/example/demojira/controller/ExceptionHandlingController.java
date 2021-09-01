@@ -15,23 +15,6 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class ExceptionHandlingController {
-    /*
-    @ResponseStatus(value= HttpStatus.NOT_FOUND)  // 404
-    @ExceptionHandler({MyEntityNotFoundException.class})
-    public void notFound() {
-        // Nothing to do
-        //System.out.println("not found");
-    }
-     */
-
-    /*
-    @ResponseBody
-    @ResponseStatus(value= HttpStatus.NOT_FOUND)  // 404
-    @ExceptionHandler({MyEntityNotFoundException.class})
-    public BaseError notFound() {
-        return new BaseError("entity not found");
-    }
-     */
 
     @ResponseBody
     @ResponseStatus(value= HttpStatus.NOT_FOUND)  // 404
@@ -39,8 +22,6 @@ public class ExceptionHandlingController {
     public BaseError notFound(RuntimeException ex) {
         return new BaseError(ex.getMessage());
     }
-    //одно исключение, но message передаем снаружи?
-
 
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)  // 400
     @ExceptionHandler(EntityAlreadyExistsException.class)
