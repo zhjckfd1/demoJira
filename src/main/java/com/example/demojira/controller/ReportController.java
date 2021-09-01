@@ -87,7 +87,7 @@ public class ReportController {
             description = "Позволяет получить отчет по списку критериев"
     )
     @RequestMapping(value = "/reports/getByCriteria",  method = RequestMethod.GET)
-    public ResponseEntity<List<ReportGetDto>> readByCriteria(@RequestBody ReportCriteriaDto reportCriteriaDto){
+    public ResponseEntity<List<ReportGetDto>> readByCriteria(@RequestBody @Valid ReportCriteriaDto reportCriteriaDto){
         final List<ReportGetDto> reports = reportService.getAllByCriteria(reportCriteriaDto);
         return new ResponseEntity<>(reports, HttpStatus.OK);
     }

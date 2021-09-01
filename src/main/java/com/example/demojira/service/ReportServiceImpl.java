@@ -57,6 +57,8 @@ public class ReportServiceImpl implements ReportService {
                         employeeNotFoundMessage + reportAddDto.getEmployeeId()));
 
         Report report = reportAddDtoMapping.mapToEntity(reportAddDto, task, employee);
+
+        //report = reportRepository.save(report);
         reportRepository.save(report);
     }
 
