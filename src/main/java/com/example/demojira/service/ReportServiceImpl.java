@@ -1,5 +1,6 @@
 package com.example.demojira.service;
 
+import com.example.demojira.Constants;
 import com.example.demojira.dto.ReportAddDto;
 import com.example.demojira.dto.ReportCriteriaDto;
 import com.example.demojira.dto.ReportGetDto;
@@ -13,11 +14,8 @@ import com.example.demojira.repository.TaskRepository;
 import com.example.demojira.service.mapping.ReportAddDtoMapping;
 import com.example.demojira.service.mapping.ReportGetDtoMapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,9 +27,6 @@ public class ReportServiceImpl implements ReportService {
     private final EmployeeRepository employeeRepository;
     private final ReportAddDtoMapping reportAddDtoMapping;
     private final ReportGetDtoMapping reportGetDtoMapping;
-
-    private static final String employeeNotFoundMessage = "Не найден сотрудник с id = ";
-    private static final String taskNotFoundMessage = "Не найдена задача с id = ";
 
     @Autowired
     public ReportServiceImpl(ReportRepository reportRepository,
@@ -51,14 +46,12 @@ public class ReportServiceImpl implements ReportService {
     public void createReport(ReportAddDto reportAddDto) {
         Task task = taskRepository.findById(reportAddDto.getTaskId())
                 .orElseThrow(() -> new MyEntityNotFoundException(
-                        taskNotFoundMessage + reportAddDto.getTaskId()));
+                        Constants.TASK_NOT_FOUND_MESSAGE + reportAddDto.getTaskId()));
         Employee employee = employeeRepository.findById(reportAddDto.getEmployeeId())
                 .orElseThrow(() -> new MyEntityNotFoundException(
-                        employeeNotFoundMessage + reportAddDto.getEmployeeId()));
+                        Constants.EMPLOYEE_NOT_FOUND_MESSAGE + reportAddDto.getEmployeeId()));
 
         Report report = reportAddDtoMapping.mapToEntity(reportAddDto, task, employee);
-
-        //report = reportRepository.save(report);
         reportRepository.save(report);
     }
 
@@ -96,8 +89,6 @@ public class ReportServiceImpl implements ReportService {
                 .stream()
                 .map(reportGetDtoMapping::mapToDto)
                 .collect(Collectors.toList());
-        //переименовываем в ReportGetDtoConverter?
-        //попробовать библиотеку ModelMapper? (в теории избавимся от пакета mapping)
     }
 
     @Override
