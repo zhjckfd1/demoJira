@@ -38,14 +38,14 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void addTask(TaskRegistrateDto trd) {
         Employee employee = employeeRepository.findById(trd.getEmployeeId())
-                .orElseThrow(MyEntityNotFoundException::new);
+                .orElseThrow(() -> new MyEntityNotFoundException("Не найден сотрудник с id = " + trd.getEmployeeId()));
         TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
 
         if (ts != null) {
             Task task = taskRegistrateDtoMapping.mapToEntity(trd, ts, employee);
             taskRepository.save(task);
         } else {
-            throw new MyEntityNotFoundException();
+            throw new MyEntityNotFoundException("Начальный статус не найден в репозитории");
         }
     }
 
@@ -58,14 +58,15 @@ public class TaskServiceImpl implements TaskService {
             }
             if (taskUpdateDto.getEmployeeId() != null) {
                 Employee emp = employeeRepository.findById(taskUpdateDto.getEmployeeId())
-                        .orElseThrow(MyEntityNotFoundException::new);
+                        .orElseThrow(() -> new MyEntityNotFoundException(
+                                "Не найден сотрудник с id = " + taskUpdateDto.getEmployeeId()));
                 task.setEmployee(emp);
             }
             if (taskUpdateDto.getTitle() != null) {
                 task.setTitle(taskUpdateDto.getTitle());
             }
         }, () -> {
-            throw new MyEntityNotFoundException();
+            throw new MyEntityNotFoundException("Не найдена задача с id = " + taskId);
         });
     }
 
@@ -83,21 +84,25 @@ public class TaskServiceImpl implements TaskService {
             }
             if (contain) {
                 TaskStatus ts = taskStatusRepository.findById(newStatusId)
-                        .orElseThrow(MyEntityNotFoundException::new);
+                        .orElseThrow(
+                                () -> new MyEntityNotFoundException("Не найден статус задачи с id = " + newStatusId));
                 task.setStatus(ts);
             } else {
                 throw new IncorrectStatusChangeException();
             }
 
         }, () -> {
-            throw new MyEntityNotFoundException();
+            throw new MyEntityNotFoundException("Не найдена задача с id = " + taskId);
         });
     }
 
     @Override
     @Transactional
     public TaskGetDto getById(Integer taskId) {
-        return taskGetDtoMapping.mapToDto(taskRepository.findById(taskId).orElseThrow(MyEntityNotFoundException::new));
+        return taskGetDtoMapping
+                .mapToDto(taskRepository
+                        .findById(taskId)
+                        .orElseThrow(() -> new MyEntityNotFoundException(taskId)));
     }
 
     @Override

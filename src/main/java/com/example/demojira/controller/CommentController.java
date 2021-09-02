@@ -64,7 +64,7 @@ public class CommentController {
     )
     @RequestMapping(value = "/comments/employees/{employeeId}",  method = RequestMethod.GET)
     public ResponseEntity<List<CommentEmployeeDto>> readEmployeeComments(
-            @PathVariable(name = "employeeId") @Parameter(description = "id задачи") @Min(1) Integer employeeId) {
+            @PathVariable(name = "employeeId") @Parameter(description = "id сотрудника") @Min(1) Integer employeeId) {
         final List<CommentEmployeeDto> comments = commentService.getAllCommentsOnTheEmployee(employeeId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }

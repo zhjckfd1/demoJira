@@ -1,6 +1,17 @@
 package com.example.demojira.exceptions;
 
-import javassist.NotFoundException;
-
 public class MyEntityNotFoundException extends NullPointerException {
+
+    public MyEntityNotFoundException() {
+        super("Entity is not found");
+    }
+
+    public MyEntityNotFoundException(Integer id) {
+        super("entity is not found, id = " + id);
+    }
+
+    public MyEntityNotFoundException(String message) {
+        super(message);
+    }
+
 }
