@@ -1,5 +1,6 @@
 package com.example.demojira.service;
 
+import com.example.demojira.Constants;
 import com.example.demojira.dto.CommentAddDto;
 import com.example.demojira.dto.CommentDto;
 import com.example.demojira.dto.CommentEmployeeDto;
@@ -25,26 +26,30 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final TaskRepository taskRepository;
+    private final EmployeeRepository employeeRepository;
+    private final CommentDtoMapping commentDtoMapping;
+    private final CommentEmployeeDtoMapping commentEmployeeDtoMapping;
+    private final CommentTaskDtoMapping commentTaskDtoMapping;
+    private final CommentAddDtoMapping commentAddDtoMapping;
 
     @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private CommentDtoMapping commentDtoMapping;
-
-    @Autowired
-    private CommentEmployeeDtoMapping commentEmployeeDtoMapping;
-
-    @Autowired
-    private CommentTaskDtoMapping commentTaskDtoMapping;
-
-    @Autowired
-    private CommentAddDtoMapping commentAddDtoMapping;
+    public CommentServiceImpl(CommentRepository commentRepository,
+                              TaskRepository taskRepository,
+                              EmployeeRepository employeeRepository,
+                              CommentDtoMapping commentDtoMapping,
+                              CommentEmployeeDtoMapping commentEmployeeDtoMapping,
+                              CommentTaskDtoMapping commentTaskDtoMapping,
+                              CommentAddDtoMapping commentAddDtoMapping){
+        this.commentAddDtoMapping = commentAddDtoMapping;
+        this.commentDtoMapping = commentDtoMapping;
+        this.commentRepository = commentRepository;
+        this.commentTaskDtoMapping = commentTaskDtoMapping;
+        this.commentEmployeeDtoMapping = commentEmployeeDtoMapping;
+        this.employeeRepository = employeeRepository;
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     @Transactional
@@ -68,9 +73,13 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void addComment(CommentAddDto commentAddDto) {
         Task task = taskRepository.findById(commentAddDto.getTaskId())
-                .orElseThrow(MyEntityNotFoundException::new);
+                .orElseThrow(
+                        () -> new MyEntityNotFoundException(
+                                Constants.TASK_NOT_FOUND_MESSAGE + commentAddDto.getTaskId()));
         Employee employee = employeeRepository.findById(commentAddDto.getEmployeeId())
-                .orElseThrow(MyEntityNotFoundException::new);
+                .orElseThrow(
+                        () -> new MyEntityNotFoundException(
+                                Constants.EMPLOYEE_NOT_FOUND_MESSAGE + commentAddDto.getEmployeeId()));
 
         Comment comment = commentAddDtoMapping.mapToEntity(commentAddDto, task, employee);
         commentRepository.save(comment);
@@ -89,6 +98,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentDto getById(Integer commentId) {
         return commentDtoMapping
-                .mapToDto(commentRepository.findById(commentId).orElseThrow(MyEntityNotFoundException::new));
+                .mapToDto(commentRepository
+                        .findById(commentId)
+                        .orElseThrow(() -> new MyEntityNotFoundException(commentId)));
     }
 }
