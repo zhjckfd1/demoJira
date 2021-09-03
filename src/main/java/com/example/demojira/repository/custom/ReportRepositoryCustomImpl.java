@@ -1,6 +1,7 @@
 package com.example.demojira.repository.custom;
 
 import com.example.demojira.model.Report;
+import com.example.demojira.model.Report_;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -26,10 +27,10 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom{
 
         List<Predicate> predicates = new ArrayList<>();
         if (taskId != null) {
-            predicates.add(criteriaBuilder.equal(root.get("task"), taskId));
+            predicates.add(criteriaBuilder.equal(root.get(Report_.TASK), taskId));
         }
         if (employeeId != null) {
-            predicates.add(criteriaBuilder.equal(root.get("employee"), employeeId));
+            predicates.add(criteriaBuilder.equal(root.get(Report_.EMPLOYEE), employeeId));
         }
 
         criteriaQuery.where(predicates.toArray(new Predicate[0]));

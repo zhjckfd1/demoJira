@@ -14,16 +14,21 @@ import java.util.stream.Collectors;
 @Service
 public class ChangeStatusServiceImpl implements ChangeStatusService{
 
-    @Autowired
-    private ChangeStatusRepository changeStatusRepository;
+    private final ChangeStatusRepository changeStatusRepository;
+    private final ChangeStatusGetDtoMapping mappingChangeStatusGetDto;
 
     @Autowired
-    private ChangeStatusGetDtoMapping mappingChangeStatusGetDto;
+    public ChangeStatusServiceImpl(ChangeStatusRepository changeStatusRepository,
+                                   ChangeStatusGetDtoMapping mappingChangeStatusGetDto){
+        this.changeStatusRepository = changeStatusRepository;
+        this.mappingChangeStatusGetDto = mappingChangeStatusGetDto;
+    }
 
     @Override
     @Transactional
     public List<ChangeStatusGetDto> getAll(){
-        return changeStatusRepository.findAll()
+        return changeStatusRepository
+                .findAll()
                 .stream()
                 .map(mappingChangeStatusGetDto::mapToDto)
                 .collect(Collectors.toList());
@@ -32,7 +37,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
     @Override
     @Transactional
     public List<ChangeStatusGetDto> getAllByBeginTaskStatusId(Integer beginStatusId){
-        return changeStatusRepository.getAllByBeginTaskStatusId(beginStatusId)
+        return changeStatusRepository
+                .getAllByBeginTaskStatusId(beginStatusId)
                 .stream()
                 .map(mappingChangeStatusGetDto::mapToDto)
                 .collect(Collectors.toList());
@@ -41,7 +47,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
     @Override
     @Transactional
     public List<ChangeStatusGetDto> getAllByEndTaskStatusId(Integer endStatusId){
-        return changeStatusRepository.getAllByEndTaskStatusId(endStatusId)
+        return changeStatusRepository
+                .getAllByEndTaskStatusId(endStatusId)
                 .stream()
                 .map(mappingChangeStatusGetDto::mapToDto)
                 .collect(Collectors.toList());
@@ -51,6 +58,8 @@ public class ChangeStatusServiceImpl implements ChangeStatusService{
     @Transactional
     public ChangeStatusGetDto getById(Integer changeStatusId){
         return mappingChangeStatusGetDto
-                .mapToDto(changeStatusRepository.findById(changeStatusId).orElseThrow(MyEntityNotFoundException::new));
+                .mapToDto(changeStatusRepository
+                        .findById(changeStatusId)
+                        .orElseThrow(() -> new MyEntityNotFoundException(changeStatusId)));
     }
 }

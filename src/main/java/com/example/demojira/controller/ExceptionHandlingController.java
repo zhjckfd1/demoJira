@@ -21,22 +21,12 @@ public class ExceptionHandlingController {
         return new BaseError(ex.getMessage());
     }
 
+    @ResponseBody
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler(EntityAlreadyExistsException.class)
-    public void alreadyFound() {
-        // Nothing to do
+    @ExceptionHandler({EntityAlreadyExistsException.class,
+            IncorrectStatusChangeException.class,
+            TryingToCreateABondOnYourselfException.class})
+    public BaseError badRequest(RuntimeException ex) {
+        return new BaseError(ex.getMessage());
     }
-
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler({IncorrectStatusChangeException.class})
-    public void incorrectTaskStatusUpdate() {
-        // Nothing to do
-    }
-
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler({TryingToCreateABondOnYourselfException.class})
-    public void incorrectTasksRelationshipCreate() {
-        // Nothing to do
-    }
-
 }

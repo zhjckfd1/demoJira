@@ -1,5 +1,6 @@
 package com.example.demojira.service;
 
+import com.example.demojira.Constants;
 import com.example.demojira.dto.*;
 import com.example.demojira.exceptions.IncorrectStatusChangeException;
 import com.example.demojira.exceptions.MyEntityNotFoundException;
@@ -17,35 +18,39 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+    private final TaskStatusRepository taskStatusRepository;
+    private final EmployeeRepository employeeRepository;
+    private final TaskGetDtoMapping taskGetDtoMapping;
+    private final TaskRegistrateDtoMapping taskRegistrateDtoMapping;
 
     @Autowired
-    private TaskStatusRepository taskStatusRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private TaskGetDtoMapping taskGetDtoMapping;
-
-    @Autowired
-    private TaskRegistrateDtoMapping taskRegistrateDtoMapping;
-
-    private static final String START_STATUS = "BASE";
+    public TaskServiceImpl(TaskRepository taskRepository,
+                           TaskStatusRepository taskStatusRepository,
+                           EmployeeRepository employeeRepository,
+                           TaskGetDtoMapping taskGetDtoMapping,
+                           TaskRegistrateDtoMapping taskRegistrateDtoMapping) {
+        this.employeeRepository = employeeRepository;
+        this.taskGetDtoMapping = taskGetDtoMapping;
+        this.taskRegistrateDtoMapping = taskRegistrateDtoMapping;
+        this.taskRepository = taskRepository;
+        this.taskStatusRepository = taskStatusRepository;
+    }
 
     @Override
     @Transactional
     public void addTask(TaskRegistrateDto trd) {
         Employee employee = employeeRepository.findById(trd.getEmployeeId())
-                .orElseThrow(() -> new MyEntityNotFoundException("Не найден сотрудник с id = " + trd.getEmployeeId()));
-        TaskStatus ts = taskStatusRepository.findByCode(START_STATUS);
+                .orElseThrow(
+                        () -> new MyEntityNotFoundException(Constants.EMPLOYEE_NOT_FOUND_MESSAGE + trd.getEmployeeId())
+                );
+        TaskStatus ts = taskStatusRepository.findByCode(Constants.TASK_BASE_STATUS);
 
         if (ts != null) {
             Task task = taskRegistrateDtoMapping.mapToEntity(trd, ts, employee);
             taskRepository.save(task);
         } else {
-            throw new MyEntityNotFoundException("Начальный статус не найден в репозитории");
+            throw new MyEntityNotFoundException(Constants.BASE_TASK_STATUS_NOT_FOUND_MESSAGE);
         }
     }
 
@@ -59,14 +64,14 @@ public class TaskServiceImpl implements TaskService {
             if (taskUpdateDto.getEmployeeId() != null) {
                 Employee emp = employeeRepository.findById(taskUpdateDto.getEmployeeId())
                         .orElseThrow(() -> new MyEntityNotFoundException(
-                                "Не найден сотрудник с id = " + taskUpdateDto.getEmployeeId()));
+                                Constants.EMPLOYEE_NOT_FOUND_MESSAGE + taskUpdateDto.getEmployeeId()));
                 task.setEmployee(emp);
             }
             if (taskUpdateDto.getTitle() != null) {
                 task.setTitle(taskUpdateDto.getTitle());
             }
         }, () -> {
-            throw new MyEntityNotFoundException("Не найдена задача с id = " + taskId);
+            throw new MyEntityNotFoundException(Constants.TASK_NOT_FOUND_MESSAGE + taskId);
         });
     }
 
@@ -83,16 +88,19 @@ public class TaskServiceImpl implements TaskService {
                 }
             }
             if (contain) {
+                //в таблице CHANGES_STATUS меняем id статуса на код статуса
+                //меняем id на код
                 TaskStatus ts = taskStatusRepository.findById(newStatusId)
                         .orElseThrow(
-                                () -> new MyEntityNotFoundException("Не найден статус задачи с id = " + newStatusId));
+                                () -> new MyEntityNotFoundException(
+                                        Constants.TASK_STATUS_NOT_FOUND_MESSAGE + newStatusId));
                 task.setStatus(ts);
             } else {
                 throw new IncorrectStatusChangeException();
             }
 
         }, () -> {
-            throw new MyEntityNotFoundException("Не найдена задача с id = " + taskId);
+            throw new MyEntityNotFoundException(Constants.TASK_NOT_FOUND_MESSAGE + taskId);
         });
     }
 

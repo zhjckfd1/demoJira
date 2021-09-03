@@ -20,17 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    //@Autowired
-    private EmployeeRepository employeeRepository;
-
-    //@Autowired
-    private HashWorkerMd5 hashWorkerMd5;
-
-    //@Autowired
-    private EmployeeGetDtoMapping employeeGetDtoMapping;
-
-    //@Autowired
-    private EmployeeRegistrateDtoMapping employeeRegistrateDtoMapping;
+    private final EmployeeRepository employeeRepository;
+    private final HashWorkerMd5 hashWorkerMd5;
+    private final EmployeeGetDtoMapping employeeGetDtoMapping;
+    private final EmployeeRegistrateDtoMapping employeeRegistrateDtoMapping;
 
     @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository,
@@ -67,7 +60,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeGetDto getById(Integer employeeId) {
         return employeeGetDtoMapping
-                .mapToDto(employeeRepository.findById(employeeId).orElseThrow(MyEntityNotFoundException::new));
+                .mapToDto(employeeRepository.findById(employeeId)
+                        .orElseThrow(() -> new MyEntityNotFoundException(employeeId)));
     }
 
     @Override
@@ -87,15 +81,15 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setPassword(hashWorkerMd5.md5Apache(employeeDto.getPassword()));
             }
         }, () -> {
-            throw new MyEntityNotFoundException();
+            throw new MyEntityNotFoundException(employeeId);
         });
     }
 
     @Override
     @Transactional
     public void changeActive(Integer employeeId) {
-        //Employee e = employeeRepository.getById(employeeId);
-        Employee e = employeeRepository.findById(employeeId).orElseThrow(MyEntityNotFoundException::new);
+        Employee e = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new MyEntityNotFoundException(employeeId));
         e.setActive(!e.getActive());
     }
 
