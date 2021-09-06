@@ -1,6 +1,6 @@
 package com.example.demojira.exceptions;
 
-public class MyEntityNotFoundException extends NullPointerException {
+public class MyEntityNotFoundException extends MyException {
 
     public MyEntityNotFoundException() {
         super("Entity is not found");

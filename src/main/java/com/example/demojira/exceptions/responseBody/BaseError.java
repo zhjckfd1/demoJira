@@ -1,6 +1,5 @@
 package com.example.demojira.exceptions.responseBody;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BaseError {

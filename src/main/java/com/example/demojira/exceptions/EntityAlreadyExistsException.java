@@ -1,7 +1,6 @@
 package com.example.demojira.exceptions;
 
-//@ResponseStatus(value= HttpStatus.BAD_REQUEST)
-public class EntityAlreadyExistsException extends RuntimeException {
+public class EntityAlreadyExistsException extends MyException {
 
     public EntityAlreadyExistsException() {
         super("Entity already exists");
