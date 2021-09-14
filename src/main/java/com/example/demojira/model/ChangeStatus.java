@@ -1,5 +1,7 @@
 package com.example.demojira.model;
 
+import org.dozer.Mapping;
+
 import javax.persistence.*;
 
 @Table(name = "changes_status")
@@ -41,4 +43,16 @@ public class ChangeStatus {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    /*
+    @Mapping("beginStatusId")
+    public Integer getBeginTaskStatusIdMapping(){
+        //без Mapping в конце - конфликт (с "List<ChangeStatus> getAllByBeginTaskStatusId(Integer id);" в ChangeStatusRepository)
+        return beginTaskStatus.getId();
+    }
+
+    @Mapping("endStatusId")
+    public Integer getEndTaskStatusIdMapping(){
+        return endTaskStatus.getId();
+    }*/
 }
